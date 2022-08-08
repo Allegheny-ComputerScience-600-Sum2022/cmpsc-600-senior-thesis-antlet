@@ -2,21 +2,40 @@
 
 ## Statement of the problem
 
-Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed. Identifier names must be created and thought-over with care. Developers should think thoroughly about their naming conventions in accordance with several factors; thus where a problem arises. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency. Factors that need to be addressed include but are not limited to identifier length, style, comprehension and readability. This proposal will focus on the idea of developing better identifiers in accordance with naming conventions that are not required in the Computer Science field but are rather centered on good hygiene in writing code.
+Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed: Identifier names must be created and thought-over with care. To experienced professionals this task should come easily, but to students it is not so simple. Without the experience to know how to properly format an identifier based on its context, student-created identifiers often fall short of expectations. One such formatting aspect that is associated with them is name length. Name length is a good indicator of the general descriptiveness of a word. By conducting a Python study with the identifiers of students, Python libraries and textbooks, Wang et al. demonstrated a clear distinction with the identifier lengths of students.
+
+![The naming length distribution of integers and floats in different data sets.](images/int-float_naming.jpg)
+![The naming length distribution of functions in different data sets.](images/function_naming.jpg)
+![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)
+
+In three different comparisons between student, library and textbook name lengths, libraries and textbooks tended to yield similar results while students largely differed. It is important to acknowledge that professional developers and writers of coding textbooks are two examples of those who follow Python standards and create overall quality programs. With this in mind, student identifiers with lengths that are shown to be different from accepted identifiers demonstrate a shortcoming of student ability. Here lies the problem regarding student developers and identifier names. The name-length example shows one piece of the puzzle that inexperienced programmers are faced with. While Python identifiers can technically be named freely, there is an importance to consider in carefully choosing names. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. Even though `x` may be a variable that is able to identify an assignment, audiences of the code will not have this insider knowledge and therefore will not be able to read and comprehend thr program in an effective manner. Better yet, developers themselves will often have trouble in understanding their own code when they revisit it after a length of time. Detailed comments help in this case, but readability is still compromised when it is necessary to repeatedly refer to them. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency due to an increase in readability and comprehension.
+
+Factors that can be associated with the quality of identifiers are length, style, grammar, existence of associated comments and comprehension. These naming qualities will be further discussed regarding their impact on overall identifier quality.
 
 ## Overall aim
 
-This research project aims to create a tool in Python that evaluates identifier names in Python source code. The criteria used for this evaluation will be determined based on the research that is outlined in the next section. Overall, the tool will:
+The solution presented to solve this problem is NamePy, an identifier-focused linter for beginning Python developers. The tool will aim to assist students with creating quality identifiers that are similar to those made my professionals. At a glance, the tool will:
 
 - Be leveraged by Python users
-- Output messages for specific identifier errors
-- Rate programs according to their identifiers
+- Follow a predetermined set of standards
+- Output error/suggestion messages when standards are not met
+- Provide program scores
+
+The study by Wang et al. used name-length and name-style for comparison to determine some "ideal" standards/suggestions for Python students. This same type of logic is what will drive the set of standards that the tool will use to evaluate identifiers. The features and their specifics are determined by the research done in the next section. With the features and their limits decided, the tool will parse its given program, find its identifiers and analyze them based on the standards. If names are determined to conflict with the predetermined rules of the linter, error messages will be produced in an attempt to help the user solve the issues. In addition to this, scores will be produced based on the evaluation for optimal visualization.
 
 With the help of this tool, developers will be given feedback that helps to improve readability and code comprehension by naming identifiers in a better way.
 
 ## Background motivating research
 
 This project idea initialized with my background in the Computer Science field starting as a beginner. There is much to learn at the beginning stages, so naturally there are some topics that are not taught to the fullest degree. For me, one such topic was naming conventions. Snake case, camel case, numbers, letters, identifier content and identifier types are all things that remained uncertain for me until I gained more experience as a student. As a student developer I am pursuing this project to aid other developers in the struggles that I experienced. On a personal level I am pursuing this project to learn more about the complexities of programmatic naming conventions, but also naming and language in a broad sense. Aside from my personal background, initial research into the area proved to offer more motivation as well. Information about identifier length, style, grammar and associated comments as well as the topics of reading comprehension and linting all aided with my creation and understanding of this project't goals.
+
+
+
+* What is relevant and what is not?
+* Data is relevant: add a set about beginner programmers
+* Statement of the problem can include gravity and harms and all sorts of things like that
+* Example: prevalence of thing, novelty of tool, intent of tool, motivation for why it is necessary
+
 
 # Related Work
 

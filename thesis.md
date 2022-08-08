@@ -2,13 +2,13 @@
 
 ## Statement of the problem
 
-Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed: Identifier names must be created and thought-over with care. To experienced professionals this task should come easily, but to students it is not so simple. Without the experience to know how to properly format an identifier based on its context, student-created identifiers often fall short of expectations. One such formatting aspect that is associated with them is name length. Name length is a good indicator of the general descriptiveness of a word. By conducting a Python study with the identifiers of students, Python libraries and textbooks, Wang et al. demonstrated a clear distinction with the identifier lengths of students.
+Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed: Identifier names must be created and thought-over with care. To experienced professionals this task should come easily, but to students it is not so simple. Without the experience to know how to properly format an identifier based on its context, student-created identifiers often fall short of expectations. One such formatting aspect that is associated with them is name length. Name length is a good indicator of the general descriptiveness of a word. By conducting a Python study with the identifiers of students, Python libraries and textbooks, Wang et al. demonstrated a clear distinction with the identifier lengths of students [@Wang].
 
 ![The naming length distribution of integers and floats in different data sets.](images/int-float_naming.jpg)
 ![The naming length distribution of functions in different data sets.](images/function_naming.jpg)
 ![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)
 
-In three different comparisons between student, library and textbook name lengths, libraries and textbooks tended to yield similar results while students largely differed. It is important to acknowledge that professional developers and writers of coding textbooks are two examples of those who follow Python standards and create overall quality programs. With this in mind, student identifiers with lengths that are shown to be different from accepted identifiers demonstrate a shortcoming of student ability. Here lies the problem regarding student developers and identifier names. The name-length example shows one piece of the puzzle that inexperienced programmers are faced with. While Python identifiers can technically be named freely, there is an importance to consider in carefully choosing names. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. Even though `x` may be a variable that is able to identify an assignment, audiences of the code will not have this insider knowledge and therefore will not be able to read and comprehend thr program in an effective manner. Better yet, developers themselves will often have trouble in understanding their own code when they revisit it after a length of time. Detailed comments help in this case, but readability is still compromised when it is necessary to repeatedly refer to them. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency due to an increase in readability and comprehension.
+In three different comparisons between student, library and textbook name lengths, libraries and textbooks tended to yield similar results while students largely differed [@Wang]. It is important to acknowledge that professional developers and writers of coding textbooks are two examples of those who follow Python standards and create overall quality programs. With this in mind, student identifiers with lengths that are shown to be different from accepted identifiers demonstrate a shortcoming of student ability. Here lies the problem regarding student developers and identifier names. The name-length example shows one piece of the puzzle that inexperienced programmers are faced with. While Python identifiers can technically be named freely, there is an importance to consider in carefully choosing names. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. Even though `x` may be a variable that is able to identify an assignment, audiences of the code will not have this insider knowledge and therefore will not be able to read and comprehend thr program in an effective manner. Better yet, developers themselves will often have trouble in understanding their own code when they revisit it after a length of time. Detailed comments help in this case, but readability is still compromised when it is necessary to repeatedly refer to them. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency due to an increase in readability and comprehension.
 
 Factors that can be associated with the quality of identifiers are length, style, grammar, existence of associated comments and comprehension. These naming qualities will be further discussed regarding their impact on overall identifier quality.
 
@@ -21,7 +21,7 @@ The solution presented to solve this problem is NamePy, an identifier-focused li
 - Output error/suggestion messages when standards are not met
 - Provide program scores
 
-The study by Wang et al. used name-length and name-style for comparison to determine some "ideal" standards/suggestions for Python students. This same type of logic is what will drive the set of standards that the tool will use to evaluate identifiers. The features and their specifics are determined by the research done in the next section. With the features and their limits decided, the tool will parse its given program, find its identifiers and analyze them based on the standards. If names are determined to conflict with the predetermined rules of the linter, error messages will be produced in an attempt to help the user solve the issues. In addition to this, scores will be produced based on the evaluation for optimal visualization.
+The study by Wang et al. used name-length and name-style for comparison to determine some "ideal" standards/suggestions for Python students [@Wang]. This same type of logic is what will drive the set of standards that the tool will use to evaluate identifiers. The features and their specifics are determined by the research done in the next section. With the features and their limits decided, the tool will parse its given program, find its identifiers and analyze them based on the standards. If names are determined to conflict with the predetermined rules of the linter, error messages will be produced in an attempt to help the user solve the issues. In addition to this, scores will be produced based on the evaluation for optimal visualization.
 
 As a student-aimed tool, NamePy is intended to be used as a resource to instill good habits in student developers. While many popular linters are used by experienced users in their project builds, this tool is meant to be "graduated" from. Used for evaluation, it will help students to more quickly bridge the gap that exists between low and high level programmers in regard to identifier naming. With this intent reached, beginning Python developers will improve their identifier quality and therefore overall code quality for all projects to come.
 
@@ -76,149 +76,6 @@ Given these points about reading comprehension, it should be possible to develop
 Linting originates from a Unix utility "which examines C source programs, detecting a number of bugs and obscurities." It was used as a tool to enforce the rules of C more than the compiler alone [@Johnson]. From the original C linter to today's Python linters, the fundamental purpose has not changed. In Python, "Linting highlights syntactical and stylistic problems in your Python source code, which often helps you identify and correct subtle programming errors or unconventional coding practices that can lead to errors" [@VSCode]. Essentially, linters are intended to catch errors in order to improve source code. The aim of this project is to do the same thing with identifiers. Poorly named identifiers will be caught and the user will have a better understanding of how to make them better. Given this, the methods outlined in the next section focus on linting at various levels in regard to identifiers.
 
 Another term that is often used as a replacement for `linter` is `static analysis tool`. A list that is comprised of the widely used static analysis tools for every programming language can be found at [this](https://github.com/analysis-tools-dev/static-analysis) GitHub repository. Included in this list are three linters that hold high reputations and most closely resemble NamePy. These tools are `pylint`, `flake8` and `pycodestyle`. Being Python linters, they are intended to catch syntactical and stylistic errors in source code. It is important to note, though, that these tools (including NamePy) are largely suggestive in nature. The use of linters is not technically required in any instance unless otherwise specified by a manager of a project. PEP8 (the official Python style guide) notes that "A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important" [@Pep8]. This quote suggests that the importance of linting lies in the aspect of consistency. In this way, while linters are not required, they are encouraged due to the consistency that they bring. Ultimately, the creators of linting tools are able to choose the style guide that they follow. This may include rules from PEP8 as well as rules that are not official according to the Python language. Despite the rules (as mentioned before) the importance is the consistency that the tool brings. `pylint`, `flake8` and `pycodestyle` are comprised of style guides that many Python developers agree with and depend on. For this reason, NamePy will be compared to them in following section.
-
-
-
-
-
-
-
-
-# Template description
-
-This repository contains the starter materials for your thesis in Computer Science 600 and 610 
-in Summer 2022 academic term. The main directory of this repository contains the Markdown template
-for a project that is designed for use with GitHub Classroom. To learn more about the course in 
-which these assignments were completed, please visit the 
-[Computer Science Thesis Summer 2022 Allegheny College GitHub Organization](https://github.com/Allegheny-ComputerScience-600-Sum2022).
-
-The template specifies various settings in the `config.yaml` file included in the
-repository. Change the appropriate values under the `Project-specific values` 
-heading. Changing other values outside of that section may cause the project to
-fail to build. **Modify these values at your own risk.**
-
-Author your thesis in the `thesis.md` document using appropriate Markdown
-hierarchy and syntax; GitHub Actions will automatically create a PDF from the
-`abstract.md` and `proposal.md` files. Consult the `README` of the proposal
-repository to learn how to properly build and release this PDFs.
-
-Including references throughout requires a specific pseudo-Markdown tag, demonstrated
-in the following blockquote. (Inspect the `thesis.md` file to see the format.)
-
-> A citation, when included correctly, will appear as it does at the end of this
-> sentence. [@plaat1996research]
-
-To label a figure (i.e. an image), referencing the image using correct Markdown
-will automatically caption the figure:
-
-> ![Label](images/IMAGE_NAME.png)
-
-Two things specific to this template to also keep in mind:
-
-1. It is your responsibility to remove this description section before building
-the PDF version you plan to defend.
-2. References _will only appear if cited correctly_ in the text
-
-# Introduction
-
-This chapter describes your completed senior thesis work, 
-including the overall aims  and the background motivating your research. Whenever 
-possible, you should use one or more concrete examples and technical diagrams. 
-
-It is often useful and necessary to separate the introduction into multiple sections. 
-Several possible sections are proposed below, you can use these or distribute your 
-introductory text into sections in another way.
-
-The headings below propose _one way_ you might structure this section of the document.
-
-## Motivation
-
-## Current State of the Art
-
-## Goals of the Project
-
-## Ethical Implications
-
-This document requires that you discuss the ethical implications of your work -- no
-matter how benign you consider the outcome of your project. As several major studies
-of ethical issues in computer science assert: _no project is completely value-neutral_.
-
-To assist you in elaborating on these issues, the following areas are topics you might
-consider addressing. You do not need to address all of them.
-
-* Information Privacy
-* Information Accuracy (e.g. can contain reliability)
-* Potential Misuse (e.g. computer crime, unintended consequences)
-* Second- or Third-Party Risk (e.g. safety)
-* Data Collection Issues (e.g. issues inherent in collecting data)
-* Algorithmic or Data Bias
-* Potential Power Difference / Social Imbalance / Issues in Equity
-
-In addition, reflect on ways that the above harms can be or are mitigated by your work
-
-# Related work
-
-This chapter includes a broad and detailed review of relevant existing work. 
-The literature review should provide background and context for the thesis work. 
-The subsections may be organized in whatever manner seems best suited to the material--
-chronological, or by topic, or according to some other criteria 
-(e.g., primary versus secondary resources).
-
-If ethical issues are central to this work, you should also address historical and 
-contemporary issues or efforts made to address them.
-
-# Method of approach
-
-This chapter answers the "how" question - how did you complete your project, 
-including the overall design of your study, details of the algorithms and tools you 
-have used, etc.  Use technical diagrams, equations, algorithms, and paragraphs of text 
-to describe the research that you have completed. Be sure to number all figures and 
-tables and to explicitly refer to them in your text.
-
-This should contain:
-
-* lists
-* with points
-* and more points
-  * possibly subpoints
-
-For those projects whose implications address social or moral issues (i.e. ethical
-standards, causes, effects), you will want to use this section to describe how you
-actively mitigated or considered these issues.
-
-# Experiments
-
-This chapter describes your experimental set up and evaluation. It should also 
-produce and describe the results of your study. The section titles below offer
-a typical structure used for this chapter.
-
-## Experimental Design
-
-Especially as it pertains to responisble computing, if conducting experiments or 
-evaluations that involve particular ethical considerations, detail those issues here.
-
-## Evaluation
-
-## Threats to Validity
-
-# Conclusion
-
-Traditionally, this chapter addresses the areas proposed below as sections, although 
-not necessarily in this order or organized as offered. However, the last section --
-"Ethical Implcations" is required for this chapter. See the heading below for more 
-details.
-
-## Summary of Results
-
-## Future Work
-
-## Future Ethical Implications and Recommendations
-
-Especially as pertains to the public release or use of your software or methods, what
-unresolved or special issues remain? What recommendations might you make?
-
-## Conclusions
-
 
 # References
 

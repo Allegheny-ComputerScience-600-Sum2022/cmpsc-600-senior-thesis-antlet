@@ -2,11 +2,11 @@
 # https://maehr.github.io/academic-pandoc-template/
 
 # Project-specific values
-title: 'Senior Thesis'
+title: 'NamePy: An Identifier-Focused Linter for Beginning Python Developers'
 author: 'Student Name'
-date: '22 July 2022'
-firstreader: 'First Reader'
-secondreader: 'Second Reader'
+date: '8 August 2022'
+firstreader: 'Douglas Luman'
+secondreader: 'Oliver Bonham-Carter'
 logo: 'images/logo'
 
 # Template Values: DO NOT TOUCH

@@ -23,19 +23,13 @@ The solution presented to solve this problem is NamePy, an identifier-focused li
 
 The study by Wang et al. used name-length and name-style for comparison to determine some "ideal" standards/suggestions for Python students. This same type of logic is what will drive the set of standards that the tool will use to evaluate identifiers. The features and their specifics are determined by the research done in the next section. With the features and their limits decided, the tool will parse its given program, find its identifiers and analyze them based on the standards. If names are determined to conflict with the predetermined rules of the linter, error messages will be produced in an attempt to help the user solve the issues. In addition to this, scores will be produced based on the evaluation for optimal visualization.
 
-With the help of this tool, developers will be given feedback that helps to improve readability and code comprehension by naming identifiers in a better way.
+As a student-aimed tool, NamePy is intended to be used as a resource to instill good habits in student developers. While many popular linters are used by experienced users in their project builds, this tool is meant to be "graduated" from. Used for evaluation, it will help students to more quickly bridge the gap that exists between low and high level programmers in regard to identifier naming. With this intent reached, beginning Python developers will improve their identifier quality and therefore overall code quality for all projects to come.
 
-## Background motivating research
+## Motivation
 
-This project idea initialized with my background in the Computer Science field starting as a beginner. There is much to learn at the beginning stages, so naturally there are some topics that are not taught to the fullest degree. For me, one such topic was naming conventions. Snake case, camel case, numbers, letters, identifier content and identifier types are all things that remained uncertain for me until I gained more experience as a student. As a student developer I am pursuing this project to aid other developers in the struggles that I experienced. On a personal level I am pursuing this project to learn more about the complexities of programmatic naming conventions, but also naming and language in a broad sense. Aside from my personal background, initial research into the area proved to offer more motivation as well. Information about identifier length, style, grammar and associated comments as well as the topics of reading comprehension and linting all aided with my creation and understanding of this project't goals.
+This project idea initialized with my background in the Computer Science field starting as a beginner. Given that there is much to learn at the early stages of programming, naming conventions was one area that had a large bridge to cross. Until I gained more experience, the importance of identifier aspects like style, grammar and content was not clear. A large amount of trial and error was used until fundamental ideas and practices were achieved. Figures 1-3 suggest a similar experience among other students. With prior experience, I am pursuing this project to aid other developers in the struggles that I faced.
 
-
-
-* What is relevant and what is not?
-* Data is relevant: add a set about beginner programmers
-* Statement of the problem can include gravity and harms and all sorts of things like that
-* Example: prevalence of thing, novelty of tool, intent of tool, motivation for why it is necessary
-
+Another goal of the creation of NamePy is to explore the complexities of programmatic naming conventions. Given the somewhat creative nature of identifiers there is inherently no perfect or ideal name for any given assignment. This is where research comes into play to determine a robust set of tool standards based on the findings of others. In the end, there are only a few rules that should be followed (namely PEP8) when naming in Python. NamePy provides suggestions based on previously found evidence to increase the overall quality of identifiers. Evidence involving identifier length, style, grammar and associated comments as well as the topics of reading comprehension and linting are considered in the following section.
 
 # Related Work
 

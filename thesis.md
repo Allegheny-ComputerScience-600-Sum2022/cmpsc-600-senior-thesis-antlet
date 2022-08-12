@@ -18,7 +18,11 @@ Continuing with the pattern, Figure 3 shows the shortest name lengths coming fro
 
 ![The naming style distribution of integers and floats in different data sets.](images/int-float-style.jpg)
 
-![The eight commonly used naming styles](images/naming_style_table.jpg)
+Table: Eight commonly used naming styles
+
+|Naming styles |Example |
+|:-------------|:-------|
+|single lowercase letter |a |
 
 Figure 4 shows the naming styles that are most common amongst each source from Table 1. With students, single lowercase style had the highest percentage at 38.02%. Both the textbook and the five libraries resulted in the lowercase without underscore style being the most prevalent. The libraries consisted of 50.64% with this style and the textbook consisted of 35.90%.
 

@@ -5,10 +5,54 @@
 Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed: Identifier names must be created and thought-over with care. To experienced professionals this task should come easily, but to students it is not so simple. Without the experience to know how to properly format an identifier based on its context, student-created identifiers often fall short of expectations. One such formatting aspect that is associated with them is name length. Name length is a good indicator of the general descriptiveness of a word. By conducting a Python study with the identifiers of students, Python libraries and textbooks, Wang et al. demonstrated a clear distinction with the identifier lengths of students [@Wang].
 
 ![The naming length distribution of integers and floats in different data sets.](images/int-float_naming.jpg)
+
+Figure 1 shows the lowest name length out of the three sources being students at an average of 3.82 characters and a standard deviation of 3.57 characters. In contrast, the combined five libraries have an average length of 6.38 characters and a standard deviation of 4.08 characters. Similarly the textbook has an average length of 6.35 characters and a standard deviation of 4.10 characters.
+
 ![The naming length distribution of functions in different data sets.](images/function_naming.jpg)
+
+Figure 2 also shows the lowest name length out of the three sources being students at an average of 4.35 characters and a standard deviation of 4.34 characters. The combined five libraries have an average length of 12.22 characters  and a standard deviation of 4.73 characters. The textbook has an average of 7.79 characters and a standard deviation of 2.76 characters.
+
 ![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)
 
-In three different comparisons between student, library and textbook name lengths, libraries and textbooks tended to yield similar results while students largely differed [@Wang]. It is important to acknowledge that professional developers and writers of coding textbooks are two examples of those who follow Python standards and create overall quality programs. With this in mind, student identifiers with lengths that are shown to be different from accepted identifiers demonstrate a shortcoming of student ability. Here lies the problem regarding student developers and identifier names. The name-length example shows one piece of the puzzle that inexperienced programmers are faced with. While Python identifiers can technically be named freely, there is an importance to consider in carefully choosing names. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. Even though `x` may be a variable that is able to identify an assignment, audiences of the code will not have this insider knowledge and therefore will not be able to read and comprehend thr program in an effective manner. Better yet, developers themselves will often have trouble in understanding their own code when they revisit it after a length of time. Detailed comments help in this case, but readability is still compromised when it is necessary to repeatedly refer to them. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency due to an increase in readability and comprehension.
+Continuing with the pattern, Figure 3 shows the shortest name lengths coming from students with an average of 1.86 characters and a standard deviation of 2.36 characters. The combined five libraries have an average length of 4.97 characters and a standard deviation of 1.94 characters. The textbook has an average of 5.04 characters and a standard deviation of 5.27 characters.
+
+![The naming style distribution of integers and floats in different data sets.](images/int-float-style.jpg)
+
+![The eight commonly used naming styles](images/naming_style_table.jpg)
+
+Figure 4 shows the naming styles that are most common amongst each source from Table 1. With students, single lowercase style had the highest percentage at 38.02%. Both the textbook and the five libraries resulted in the lowercase without underscore style being the most prevalent. The libraries consisted of 50.64% with this style and the textbook consisted of 35.90%.
+
+Three possible explanations exist for the trend of short identifier lengths of the student code analyzed with figures 1-4. The first possibility for identifiers being short is intentional obfuscation. This is defined as transforming "the program's code into another version, which is syntactically different but semantically the same" [@Rajkumar]. This method is often used by programmers "to make the code more complex and difficult to understand" [@Rajkumar]. Often it is used to either protect against malicious attacks or to make it difficult for others to utilize their code. Given that the focused source of date in the figures comes from students rather than professional developers, it is safe to say that unintentional obfuscation is the more likely explanation for short identifier lengths. The first reason this may occur is due to an overall lack of sufficient knowledge regarding identifiers. Due to the nature of identifiers not requiring specific conventions, the concept of good naming practice must be taught to students. Without adequate explanation for them to name identifiers in descriptive ways, students tend to steer toward the use of one character names as seen in figures 3 and 4. Figures 1 and 2 also demonstrate this shortcoming, though the student averages are slightly higher (though still too short to be adequately descriptive). The second reason that unintentional obfuscation may occur is due to student practices in other disciplines. Namely, mathematics (particularly algebra) focuses on variables. While programming and algebra both leverage variables, they are treated very differently. Saraswati et al. state that "Most of learning processes are only acquainted with the formal strategy in teaching linear equation with one variable" [@Saraswati]. This means that algebra students use formal tactics to deal with equations that are often linear rather than abstract tactics like those that are necessary to understand programmatic identifiers. In addition, linear equations consist of one or more variables defined with one character each. In this way, students with preset notions about variable meaning based on algebraic concepts may tend to name programmatic variables/identifiers in the same fashion. Along with this, the fundamental concept that is learned in algebra is to solve for the variable(s) in an equation. In Computer Science this concept is not the same. Rather, variables are used as functional assignments to leverage in other locations of a program. These assignments also have the capacity for more than just numbers (strings for example). Given this, students are required to learn a new understanding of variables/identifiers in order to create better names. To learn better practices and instill beneficial habits regarding programmatic naming conventions, NamePy is designed to help. With the aid of a practical tool in addition to classroom teaching of the proper concepts, the students trends that are seen in figures 1-4 should shift toward the trends of the textbook and libraries.
+
+The name-length and style examples show one piece of the puzzle that inexperienced programmers are faced with. While Python identifiers can technically be named freely, there is an importance to consider in carefully choosing those names. Identifiers that are not thoughtfully named will likely cause difficulty for third party readers of the code. Even though `x` may be a variable that is able to identify an assignment, audiences of the code will not have this insider knowledge and therefore will not be able to read and comprehend the program in an effective manner. Better yet, developers themselves will often have trouble in understanding their own code when they revisit it after a length of time. Detailed comments help in this case, but readability is still compromised when it is necessary to repeatedly refer to them. In addition, clear identifiers that are accurately descriptive are instrumental in debugging code as well as increasing parsing efficiency due to an increase in readability and comprehension.
+
+```python
+o = int(input("option(1/2):"))
+if(o == 1):
+    x = float(input("Temperature in Celsius:"))
+    y = 1.8 * (x) + 32.0
+    print("Temperature in Fahrenheit:",y)
+elif(o == 2):
+    y = float(input("Temperature in Fahrenheit:"))
+    x = (f-32)/1.8
+    print("Temperature in Celsius:",x)
+```
+
+By using single lowercase variables in the sample program above, it is difficult to keep track of each variables' meaning. To do so, the assignments of those variables must be referred to constantly.
+
+```python
+option = int(input("option(1/2):"))
+if(option == 1):
+    celsius = float(input("Temperature in Celsius:"))
+    fahrenheit = 1.8 * (celsius) + 32.0
+    print("Temperature in Fahrenheit:",fahrenheit)
+elif(option == 2):
+    fahrenheit = float(input("Temperature in Fahrenheit:"))
+    celsius = (f-32)/1.8
+    print("Temperature in Celsius:",celsius)
+```
+
+By using longer, descriptive variable names in the sample program above, it is easier to keep track of each variables' meaning. There is no need to look back at the assignment statements because the names are descriptive enough to know their function.
 
 Factors that can be associated with the quality of identifiers are length, style, grammar, existence of associated comments and comprehension. These naming qualities will be further discussed regarding their impact on overall identifier quality.
 

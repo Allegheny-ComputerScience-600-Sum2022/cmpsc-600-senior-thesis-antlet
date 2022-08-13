@@ -4,21 +4,21 @@
 
 Creating identifiers when writing programs is an important and necessary part of every developer’s job. As opposed to many other words used in source code, identifiers are created by the developer, not preset by libraries or programming languages. This fact in itself creates a task that must be addressed: Identifier names must be created and thought-over with care. To experienced professionals this task should come easily, but to students it is not so simple. Without the experience to know how to properly format an identifier based on its context, student-created identifiers often fall short of expectations. One such formatting aspect that is associated with them is name length. Name length is a good indicator of the general descriptiveness of a word. By conducting a Python study with the identifiers of students, Python libraries and textbooks, Wang et al. demonstrated a clear distinction with the identifier lengths of students [@Wang].
 
-![The naming length distribution of integers and floats in different data sets.](images/int-float_naming.jpg)[@Wang]
+![The naming length distribution of integers and floats in different data sets.][@Wang](images/int-float_naming.jpg)
 
 Figure 1 shows the lowest name length out of the three sources being students at an average of 3.82 characters and a standard deviation of 3.57 characters. In contrast, the combined five libraries have an average length of 6.38 characters and a standard deviation of 4.08 characters. Similarly the textbook has an average length of 6.35 characters and a standard deviation of 4.10 characters.
 
-![The naming length distribution of functions in different data sets.](images/function_naming.jpg)[@Wang]
+![The naming length distribution of functions in different data sets.](images/function_naming.jpg)
 
 Figure 2 also shows the lowest name length out of the three sources being students at an average of 4.35 characters and a standard deviation of 4.34 characters. The combined five libraries have an average length of 12.22 characters  and a standard deviation of 4.73 characters. The textbook has an average of 7.79 characters and a standard deviation of 2.76 characters.
 
-![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)[@Wang]
+![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)
 
 Continuing with the pattern, Figure 3 shows the shortest name lengths coming from students with an average of 1.86 characters and a standard deviation of 2.36 characters. The combined five libraries have an average length of 4.97 characters and a standard deviation of 1.94 characters. The textbook has an average of 5.04 characters and a standard deviation of 5.27 characters.
 
-![The naming style distribution of integers and floats in different data sets.](images/int-float-style.jpg)[@Wang]
+![The naming style distribution of integers and floats in different data sets.](images/int-float-style.jpg)
 
-Table: Eight commonly used naming styles[@Wang]
+Table: Eight commonly used naming styles
 
 |Naming styles |Example |
 |:-------------|:-------|

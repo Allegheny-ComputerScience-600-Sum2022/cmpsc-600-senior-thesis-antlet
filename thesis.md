@@ -8,21 +8,28 @@ Creating identifiers when writing programs is an important and necessary part of
 
 Figure 1 shows the lowest name length out of the three sources being students at an average of 3.82 characters and a standard deviation of 3.57 characters. In contrast, the combined five libraries have an average length of 6.38 characters and a standard deviation of 4.08 characters. Similarly the textbook has an average length of 6.35 characters and a standard deviation of 4.10 characters.
 
-![The naming length distribution of functions in different data sets.](images/function_naming.jpg)
+![The naming length distribution of functions in different data sets [@Wang].](images/function_naming.jpg)
 
 Figure 2 also shows the lowest name length out of the three sources being students at an average of 4.35 characters and a standard deviation of 4.34 characters. The combined five libraries have an average length of 12.22 characters  and a standard deviation of 4.73 characters. The textbook has an average of 7.79 characters and a standard deviation of 2.76 characters.
 
-![The naming length distribution of arguments in different data sets.](images/argument_naming.jpg)
+![The naming length distribution of arguments in different data sets [@Wang].](images/argument_naming.jpg)
 
 Continuing with the pattern, Figure 3 shows the shortest name lengths coming from students with an average of 1.86 characters and a standard deviation of 2.36 characters. The combined five libraries have an average length of 4.97 characters and a standard deviation of 1.94 characters. The textbook has an average of 5.04 characters and a standard deviation of 5.27 characters.
 
-![The naming style distribution of integers and floats in different data sets.](images/int-float-style.jpg)
+![The naming style distribution of integers and floats in different data sets [@Wang].](images/int-float-style.jpg)
 
-Table: Eight commonly used naming styles
+Table: Eight commonly used naming styles [@Wang]
 
-|Naming styles |Example |
-|:-------------|:-------|
-|single lowercase letter |a |
+| Naming Styles                                       | Example     |
+|-----------------------------------------------------|-------------|
+| single lowercase letter                             | a           |
+| single uppercase letter                             | A           |
+| lowercase (without underscores)                     | item        |
+| lowercase with underscores                          | Item_method |
+| uppercase (without underscores)                     | SIZE        |
+| uppercase with underscores                          | ITEM_SIZE   |
+| capitalized word (or CamelCase) without underscores | BenchAark   |
+| capitalized words with underscores                  | Bench_Aark  |
 
 Figure 4 shows the naming styles that are most common amongst each source from Table 1. With students, single lowercase style had the highest percentage at 38.02%. Both the textbook and the five libraries resulted in the lowercase without underscore style being the most prevalent. The libraries consisted of 50.64% with this style and the textbook consisted of 35.90%.
 

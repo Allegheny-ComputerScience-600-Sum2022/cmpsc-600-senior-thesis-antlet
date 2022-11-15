@@ -170,6 +170,98 @@ One aspect of NamePy as a linter that Johnson directly states about C's *Lint* i
 
 Another term that is often used as a replacement for `linter` is `static analysis tool`. A list that is comprised of the widely used static analysis tools for every programming language can be found at [this](https://github.com/analysis-tools-dev/static-analysis) GitHub repository. Included in this list are three linters that hold high reputations and most closely resemble NamePy. These tools are `pylint`, `flake8` and `pycodestyle`. Being Python linters, they are intended to catch syntactical and stylistic errors in source code. It is important to note, though, that these tools (including NamePy) are largely suggestive in nature. The use of linters is not technically required in any instance unless otherwise specified by a manager of a project. PEP8 (the official Python style guide) notes that "A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important" [@Pep8]. This quote suggests that the importance of linting lies in the aspect of consistency. In this way, while linters are not required, they are encouraged due to the consistency that they bring. Ultimately, the creators of linting tools are able to choose the style guide that they follow. This may include rules from PEP8 as well as rules that are not official according to the Python language. Despite the rules (as mentioned before) the importance is the consistency that the tool brings. `pylint`, `flake8` and `pycodestyle` are comprised of style guides that many Python developers agree with and depend on. For this reason, NamePy will be compared to them in following section.
 
+# Method of Approach
+
+## Development Environment and Toolset
+
+### Poetry
+
+### Pytest
+
+### LibCST
+
+NamePy leverages LibCST as its main library to parse source code and extract information regarding identifiers. While one would normally use Python's built-in AST module to leverage syntax trees and parse them, LibCST has more to offer. Essentially, it "creates a compromise between an Abstract Syntax Tree (AST) and a traditional Concrete Syntax Tree (CST)" [@Libcst]. Unlike traditional syntax trees, this library is lossless in the sense that it has the ability to preserve all parts of the source code including things like comments, whitespace and parenthesis.
+
+The main framework for NamePy stems from a previous project that I contributed to named CAStanet. There is a file that allows it to parse through either individual Python files or entire Python directories. A command line interface exists to perform various actions on the files. These features will also be used for this tool. At the root, the tool uses `matchers` to locate specific source code items such as assignment statements, function definitions and comments. Using this ability, various functions will be created to locate identifiers and analyze them. The tool will look for specified criteria in all of the identifiers and develop a score based on how well the criteria were met. It will also report back to the user specific errors with identifiers in a similar way to other popular linters.
+
+```python
+def var_length(path:str):
+    cast_dict = file_or_directory(path)
+    for cast in cast_dict.values():
+        var_list = match.findall(cast, match.Assign())
+```
+
+The LibCST library provides the groundwork to easily extract necessary information from programs for running functions that meet the tool's linting and scoring goals.
+
+## Levels of Implementation
+
+### IDE Level
+
+IDE's (Integrated Development Environments) are software applications that are leveraged by most developers to manipulate source code. Given the popularity and versatility of Visual Studio Code, I am choosing to use it to discuss linting at the IDE level. VSCode extensions is a large feature that gives the software application a lot of its versatility. Users are able to quickly and simply search for and install extensions that can be found on the extension marketplace.
+
+![Extension Marketplace on Visual Studio Code](images/vscode-extensions.jpg)
+
+What is beneficial about linting at this level is the very short length of time between making an error, identifying and fixing it. A participant in a study performed by Tómasdóttir et al. stated that "If you can get some bugs away from your code so early as when you write it, it’s great" [@Tomasdottir]. The rigidity of this concept can be seen by the sheer amount of VSCode extensions that exist for the purpose of catching errors as they are written. By shortening the time between making a mistake and finding/fixing it, the hardship of fixing them when they are found during compile or runtime is decreased [@Tomasdottir].
+
+Considering lower-level, junior developers, it is important to look at how catching errors at the IDE level affects learning. In general, "corrective feedback is proven to be very useful in terms of acquiring further cognitive skills." Obermüller et al. also states how "positive feedback is considered to have better effects on motivational aspects than negative feedback" [@Obermuller]. Linters are inherently negative/corrective in nature, so they will always have some sort of negative impact on student motivation. Though, IDE errors appear in a very slow, one-by-one fashion compared to linters at the CI level. This suggests minimal negative impact on student motivation while maintaining corrective feedback to acquire further cognitive skills.
+
+Despite the above information, the IDE level is not the ideal level to apply the tool with students due to cognitive complexity. When comparing the time of linting between the IDE level and a separate level (such as GitHub Actions), it can be seen that there is a higher cognitive complexity at the time of the IDE. This is due to the fact that the given task at the IDE level is to write code. By adding a linter at the same time, the difficulty of that task is increased due to the fact that errors are presented at the time of writing. Robinson presents in his article that "The effects of complexity differentials should be revealed by the fact that the cognitively simpler, less resource-demanding task will involve a lower error rate, and/or be completed faster, and be less susceptible to interference from competing tasks than the more complex task" [@Robinson]. This is important due to the fact that students will have a higher error rate given higher cognitive complexity when coding. Since the goal of the tool is to help students improve their source code, implementing it in a way that is too complex may hurt them instead.
+
+### CI Level
+
+While the IDE level of linting possesses many tools that developers use to address feedback, this project's tool is intended for students, so evaluation is more important than formative feedback. IDE level linting is not normally capable of providing evaluation metrics, so a different route would be required. Implementation of the tool in a similar manner as `Pylint` for instance (the ability to run the linter in a VSCode window upon saving) would provide an evaluation, but this integration does not fit the scope of the project. Rather, the use of GitHub Actions is a better choice to provide evaluative feedback to student developers.
+
+Referring back to Vee, in addition to the fact that coding is a literacy, she also enforces the fact that literacy is developed (or learned) and not inherent. Suggesting both that literacy is a learned skill and that this is especially prevalent in students, Vee states that "Sophisticated literacy skills such as analysis and argument have always been necessary at the highest educational echelons, but we now expect all students to achieve this level of skill under the rubric of literacy" [@Vee]. This is an important connection to make considering the evaluative nature of my tool. Student developers require evaluation on their work because they are constantly learning.
+
+Keeping in mind that coding is a literacy, Sommers provides insight based on his research on student writers. He found that students often did not revise their work because they lacked "a set of strategies to help them identify the "something larger" that they sensed was wrong and work from there" [@Villanueva]. In the same way, IDE level visualization of errors do not always help students learn how to revise their code. Rather, evaluation metrics at the GitHub Actions level would help students learn their mistakes and correct them in a "fixing something larger" manner. This is what makes the CI level optimal for this application.
+
+#### GitHub Actions
+
+Identical to popular linters such as `Pylint` the tool can be inserted into GitHub Action workflows for automation. This does not require any additional implementation to the tool itself. To do so, a `.yml` file can be created that installs and runs the tool on the given files/directories inside of a virtual environment. GitHub's documentation provides information for any developer to be able to implement the tool in this manner. Including the tool in a class of students' continuous integration build would be beneficial because it would set a standard of linting that would be followed by the whole class. Compared to running it locally, putting the tool in a build workflow would take away the manual labor and therefore make it easier and more useful. For student developers this is also a good option because instructors can create workflows incorporating it. In this way students do not have to do any extra work and they are able to automatically see errors as they appear in GitHub.
+
+### Local Use
+
+Like other open source linters, this tool will have the capacity to be installed locally on machines and to be run with software projects that students work on. It will be available on PyPI for users to install with the `pip` command and it will have the capacity to run in a similar manner to other linters such as `Pylint`. This method of using the tool is the most basic for student developers. Given that it is the same process as other popular linters, it is expected that any user will know how to use it given the documentation. Though it is the most basic, it does not offer any sort of automation. In order to check for linting errors, the user would need to manually run the tool every time they wished to check their work. Initial setup of the tool is the most simplistic compared to the previous two levels, but continued use of it is the most time-demanding. It will remain as a standard way to use the tool for any user that wishes to do so, but leveraging GitHub Actions is recommended.
+
+## Installing NamePy
+
+### Reporting Results
+
+## NamePy's Components
+
+### Feature Comparison
+
+The following table displays the differences in features between NamePy and three other popular linters. It defines the feature set that NamePy possesses and compares it to the others in order to show both similarities and singularity.
+
+| Feature                                      | NamePy | pylint | flake8 | pycodestyle |
+|----------------------------------------------|--------|--------|--------|-------------|
+| Ability to Run in GitHub Actions             | ✓      | ✓      | ✓      | ✓           |
+| Enforce PEP8 Naming Conventions              | ✗      | ✓      | ✓*     | ✓           |
+| Check Identifier Length                      | ✓      | ✗      | ✗      | ✗           |
+| Check Identifier Grammar                     | ✓      | ✗      | ✗      | ✗           |
+| Check for Identifiers w/ Associated Comments | ✓      | ✗      | ✗      | ✗           |
+| Error Evaluation Score                       | ✓      | ✓      | ✗      | ✗           |
+
+* Only with optional PEP8 plugin
+
+The feature comparison table highlights the main features of NamePy next to `pylint`, `flake8` and `pycodestyle`. The ability to run a linter in GitHub Actions is a feature that will be discussed in this section. It is an important feature for any linter to have, so it is present in all four. Checking for PEP8 standards was initially going to be a part of the feature set, but it was decided against due to the fact that it already exists among other linters. The key focus of NamePy is its unique feature set. To enfore PEP8 standards, other linters can be used in conjunction with it. Multiple topics mentioned in the `Related Works` section have been implemented as features including identifier length and grammar checks as well as associated comment checks. Because these three features analyze identifiers in a way that research suggests is effective, they are unique to NamePy. Finally, an evaluation score based on the amount of errors in a program is a feature that both NamePy and `pylint` possess, but not `flake8` or `pycodestyle`.
+
+### Feature: Identifier Length
+
+### Feature: Identifier Grammar
+
+### Feature: Associated Comments
+
+### Feature: Error Evaluation Score
+
+## NamePy's Output
+
+### Success Messages
+
+### Error Messages
+
+### Warning Messages
+
 # References
 
 ::: {#refs}

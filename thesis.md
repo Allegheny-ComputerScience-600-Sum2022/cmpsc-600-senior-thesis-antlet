@@ -247,11 +247,13 @@ Conditional statements in the functions for each type of identifier require name
 
 ### 3.4.2 Identifier Grammar
 
-<!-- pg.17 [@Newman] -->
+pg.17 [@Newman]
 Function identifiers are more likely to
 contain a verb and be represented by a verb phrase. Attribute,
 parameter, and declaration-statement identifiers typically have
 singular noun-phrase grammar patterns
+
+NamePy uses a grammatical feature with identifiers that determines their POS (Part-of-Speech). 
 
 ### 3.4.3 Comments and Docstrings
 

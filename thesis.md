@@ -239,9 +239,19 @@ The table above lists the four major features that NamePy consists of.
 
 ### 3.4.1 Identifier Length
 
+Conditional statements in the functions for each type of identifier require names to be no less than 4 characters in length and restrict names from being more than 30 characters in length. The exception for identifier names being less than 4 characters is described in section 3.4.3. The minimum and maximum numbers for this feature were determined by analyzing the study performed by Wang et al.. Regarding the minimum, in the study, out of the 36 combined library and textbook averages of identifier lengths, the lowest average found was a singular instance of 3.0 [@Wang]. Every other average length resulted in values higher than 3.0, with overall averages ranging from approximately 5.0-12.0 [@Wang]. Regarding the maximum, the charts often maxed out at 20+ characters in length, but one chart maxed out at 30+ characters [@Wang]. Given the nature of the `+` symbol as well as the inclusion of values with 30+ characters due to sufficient data, I determined that 30 is an adequate maximum length. As it was discussed in section 2.BLANK, the idea of longer identifiers equating to more descriptive names has some truth, but a line should be drawn. I determined this maximum based on the data from professional-level libraries and textbooks leveraged in the study by Wang et al..
+
 ### 3.4.2 Identifier Grammar
 
+pg.17 [@Newman]
+Function identifiers are more likely to
+contain a verb and be represented by a verb phrase. Attribute,
+parameter, and declaration-statement identifiers typically have
+singular noun-phrase grammar patterns
+
 ### 3.4.3 Comments and Docstrings
+
+[@Takang] [@Song]
 
 ### 3.4.4 Evaluation Score
 

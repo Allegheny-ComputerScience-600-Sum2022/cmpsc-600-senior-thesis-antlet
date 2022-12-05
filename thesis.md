@@ -1,6 +1,4 @@
-# Chapter 1
-
-# Introduction
+# Chapter 1: Introduction
 
 ## 1.1 Statement of the problem
 
@@ -94,9 +92,7 @@ This project idea initialized with my background in the Computer Science field s
 
 Another goal of the creation of NamePy is to explore the complexities of programmatic naming conventions. Given the somewhat creative nature of identifiers there is inherently no perfect or ideal name for any given assignment. This is where research comes into play to determine a robust set of tool standards based on the findings of others. In the end, there are only a few rules that should be followed (namely PEP8) when naming in Python. NamePy provides suggestions based on previously found evidence to increase the overall quality of identifiers. Evidence involving identifier length, style, grammar and associated comments as well as the topics of reading comprehension and linting are considered in the following section.
 
-# Chapter 2
-
-# Related Work
+# Chapter 2: Related Work
 
 There are several aspects to consider when determining an adequate identifier name. It is necessary for it to be long enough to be descriptive, but short enough for comprehension. It is necessary for it to use part-of-speech grammar, but it is not certain what grammar is most effective. It is necessary for it to use a style type that is required by the program, but a style type is not always required. It is not always necessary to include descriptive comments, but there could be a correlation with comprehension. It is necessary for it to be easily comprehended, but many of the previously mentioned topics could affect its ability to do so. There is no correct or perfect way to name identifiers due to personal preference, but this research provides a way for developers to enforce a standard that will yield overall better results.
 
@@ -174,15 +170,13 @@ One aspect of NamePy as a linter that Johnson directly states about C's *Lint* i
 
 Another term that is often used as a replacement for `linter` is `static analysis tool`. A list that is comprised of the widely used static analysis tools for every programming language can be found at [this](https://github.com/analysis-tools-dev/static-analysis) GitHub repository. Included in this list are three linters that hold high reputations and most closely resemble NamePy. These tools are `pylint`, `flake8` and `pycodestyle`. Being Python linters, they are intended to catch syntactical and stylistic errors in source code. It is important to note, though, that these tools (including NamePy) are largely suggestive in nature. The use of linters is not technically required in any instance unless otherwise specified by a manager of a project. PEP8 (the official Python style guide) notes that "A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important" [@Pep8]. This quote suggests that the importance of linting lies in the aspect of consistency. In this way, while linters are not required, they are encouraged due to the consistency that they bring. Ultimately, the creators of linting tools are able to choose the style guide that they follow. This may include rules from PEP8 as well as rules that are not official according to the Python language. Despite the rules (as mentioned before) the importance is the consistency that the tool brings. `pylint`, `flake8` and `pycodestyle` are comprised of style guides that many Python developers agree with and depend on. For this reason, NamePy will be compared to them in following section.
 
-# Chapter 3
-
-# Method of Approach
+# Chapter 3: Method of Approach
 
 This chapter describes the implementation of NamePy as well as the reasoning behind its design and its output. Charts and diagrams are used to demonstrate the flow and structure at both high and low levels.
 
 ## 3.1 NamePy as a GitHub Action
 
-NamePy is designed to be used like most popular Python linters. That is, it can be used at a local level or by creating a GitHub Action to run upon pushing to a repository. Both methods are feasible for novice Python developers, but NamePy as a GitHub Action is a more standardized approach. This is considering that the tool is also aimed at Computer Science professors to implement in their students' projects. A discussion about the appropriate implementation level for NamePy can be found later in the chapter.
+NamePy is designed to be used like most popular Python linters. That is, it can be used at a local level or by creating a GitHub Action to run upon pushing to a repository. Both methods are feasible for novice Python developers, but NamePy as a GitHub Action is the more standardized approach. This is considering that the tool is also aimed at Computer Science professors to implement in their students' projects. A discussion about the appropriate implementation level for NamePy can be found later in the chapter.
 
 Figure *number* shows the general workflow of NamePy being used as a GitHub Action from the perspective of a developer.
 
@@ -204,62 +198,61 @@ Pytest is a Python testing framework that is leveraged to create and run test ca
 
 LibCST is a library that parses Python source code as a CST (Concrete Syntax Tree) but acts like an AST (Abstract Syntax Tree). While one would normally use Python's built-in AST module to leverage syntax trees and parse them, LibCST has more to offer. Essentially, it "creates a compromise between an Abstract Syntax Tree (AST) and a traditional Concrete Syntax Tree (CST)" [@Libcst]. Unlike traditional syntax trees, this library is lossless in the sense that it has the ability to preserve all parts of the source code including things like comments, whitespace and parenthesis.
 
-The main framework for NamePy stemmed from a previous project: [CAStanet](https://github.com/cmpsc-481-s22-m1/CASTanet). This tool uses LibCST's `matchers` in order to locate nodes of specific types in source code. NamePy started this way as well, but it was refactored to use a `visitor` class instead (as can be seen in figure code segment below). In this way, it is able to traverse the whole tree in chronological order. Through each function, specific nodes for the identifiers being analyzed are extracted and conditional logic is performed with them.
+The main framework for NamePy stemmed from a previous project: [CAStanet](https://github.com/cmpsc-481-s22-m1/CASTanet). This tool uses LibCST's `matchers` in order to locate nodes of specific types in source code. NamePy started this way as well, but it was refactored to use a `visitor` class instead (as can be seen in figure code segment below). In this way, it is able to traverse the whole tree in chronological order. Through each function, specific nodes for the identifiers being analyzed are extracted and conditional logic is performed.
 
 ```python
 class IdentifierVisitor(cst.CSTVisitor):
         """Locate identifier nodes and their line and column numbers."""
 
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
+    METADATA_DEPENDENCIES = (
+        cst.metadata.PositionProvider,
+        cst.metadata.ParentNodeProvider,
+    )
 ```
 
 This code segment creates a visitor class that uses node metadata to locate specified identifiers as well as their line and column numbers. Later in the tool's source code is a metadata wrapper that is used to associate metadata with its module.
 
 ### 3.2.4 Spacy
 
-Spacy is a Python library for advanced NLP (Natural Language Processing). NamePy leverages its POS (Part of Speech) tagging for its grammar analysis feature that is discussed later in the chapter.
+Spacy is a Python library for advanced NLP (Natural Language Processing). NamePy leverages its POS (Part of Speech) tagging for its grammar analysis feature. The functions and limitations of this approach are discussed later in the chapter.
 
 ## 3.3 Identifiers Analyzed
 
-| Identifiers                    |
-|--------------------------------|
-| Assignment Statement Variables |
-| Function Definitions           |
-| Class Definitions              |
-| Function Parameters            |
+- Assignment Statement Variables
+- Function Definitions
+- Class Definitions
+- Function Parameters
 
-The four types of identifiers that NamePy analyzes are listed in the table above. Given that NamePy is designed for novice developers, it is not important for it to look towards every possible type of identifier. The list is comprised of the very common types that would be seen at a novice level. For the sake of simplicity and feasibility, the only type of variable that is analyzed is that which is declared in an assignment statement. Function definitions with parameters as well as class definitions are very commonly seen amongst the Python language as a whole.
+The four types of identifiers that NamePy analyzes are listed in the table above. Given that NamePy is designed for novice developers, it is not important for it to look towards every possible type of identifier. The list is comprised of the very common types that would be seen in most novice level source code. For the sake of simplicity and feasibility, the only type of variable that is analyzed is that which is declared in an assignment statement. Limitations of this approach are discussed later in the chapter. Function definitions with parameters as well as class definitions are very commonly seen amongst the Python language as a whole.
 
 ## 3.4 Features
 
-| Feature                                      |
-|----------------------------------------------|
-| Analyze Identifier Length                    |
-| Analyze Identifier Grammar                   |
-| Check for Associated Comments and Docstrings |
-| Error Evaluation Score                       |
+- Analyze Identifier Length
+- Analyze Identifier Grammar
+- Check for Associated Comments and Docstrings
+- Error Evaluation Score
 
 The table above lists the four major features that NamePy consists of.
 
 ### 3.4.1 Identifier Length
 
-Conditional statements in the functions for each type of identifier require names to be no less than 4 characters in length and restrict names from being more than 30 characters in length. The exception for identifier names being less than 4 characters is described in section 3.4.3. The minimum and maximum numbers for this feature were determined by analyzing the study performed by Wang et al.. Regarding the minimum, in the study, out of the 36 combined library and textbook averages of identifier lengths, the lowest average found was a singular instance of 3.0 [@Wang]. Every other average length resulted in values higher than 3.0, with overall averages ranging from approximately 5.0-12.0 [@Wang]. Regarding the maximum, the charts often maxed out at 20+ characters in length, but one chart maxed out at 30+ characters [@Wang]. Given the nature of the `+` symbol as well as the inclusion of values with 30+ characters due to sufficient data, I determined that 30 is an adequate maximum length. As it was discussed in section 2.BLANK, the idea of longer identifiers equating to more descriptive names has some truth, but a line should be drawn. I determined this maximum based on the data from professional-level libraries and textbooks leveraged in the study by Wang et al..
+Conditional statements in the functions for each type of identifier require names to be no less than 4 characters in length and restrict names from being more than 30 characters in length. The exception for identifier names being less than 4 characters is described in section 3.4.3. The minimum and maximum numbers for this feature were determined by analyzing the study performed by Wang et al.. Regarding the minimum character length, in the study, out of the 36 combined library and textbook averages of identifier lengths, the lowest average found was a singular instance of 3.0 characters [@Wang]. Every other average length resulted in values higher than 3.0, with overall averages ranging from approximately 5.0-12.0 [@Wang]. Regarding the maximum, the charts often maxed out at 20+ characters in length, with one chart maxing out at 30+ characters [@Wang]. Given the nature of the `+` symbol as well as the inclusion of values with 30+ characters due to sufficient data, I determined that 30 characters is an adequate maximum length. Figures 1-4 seen in chapter 1 display examples of the results used to make these determinations. As it was discussed in section 2.2, the idea of longer identifiers equating to more descriptive names has some truth, but a line should be drawn. I determined this maximum based on the data from professional-level libraries and textbooks leveraged in the study by Wang et al..
 
 ### 3.4.2 Identifier Grammar
 
-pg.17 [@Newman]
-Function identifiers are more likely to
-contain a verb and be represented by a verb phrase. Attribute,
-parameter, and declaration-statement identifiers typically have
-singular noun-phrase grammar patterns
+NamePy uses a grammatical feature with identifiers that determines their POS (Part-of-Speech). To do this, identifiers are first broken down into separate words based on their naming style. For the sake of feasibility, it must be assumed that each identifier is conforming to its standardized naming style according to PEP8. This means that variables, function definitions and function parameters should adhere to snake_case while class definitions should adhere to PascalCase. NamePy does not check for this because it is not considered to be a stylistic tool. Another linter such as `pylint` may be used to ensure correct PEP8 naming standards. Given the assumptions made, snake_case identifiers are split into separate words by their underscores while PascalCase identifiers are split into separate words by their uppercase letters. They are appended to a list which is then iterated through. With Spacy's natural language processing and with conditional logic, NamePy determines if any of the words in the list match the suggested part of speech.
 
-NamePy uses a grammatical feature with identifiers that determines their POS (Part-of-Speech). 
+![Part-of-speech patterns in a dataset of identifiers [@Newman].](images/pos-table.png)
+
+Figure 5 shows a table from the study of grammar patterns in source code identifiers by Newman et al. This study was used to determine the parts-of-speech that NamePy searches for in the 4 different types of identifiers. Newman et al. state that "Function identifiers are more likely to contain a verb and be represented by a verb phrase. Attribute, parameter, and declaration-statement identifiers typically have singular noun-phrase grammar patterns" [@Newman]. In the same way, based on the table, class names also typically have singular noun-phrase grammar patterns. Because of these findings, NamePy looks to see if any verbs exist in function names and if any nouns exist in the 3 other types of identifiers. If those parts-of-speech are not found, NamePy will produce an error. Given that the feature is based on the top POS of each type of identifier, this makes it nonabsolute. Developers can use identifier names that contain other parts-of-speech (as can be seen in Figure 5) without losing validity. NamePy is not intended to force certain parts-of-speech, but rather make suggestions based on common grammar patterns. Most commonly, identifiers should conform to this feature's standards, but there are exceptions when it is not necessary. In addition to this, limitations of Spacy's POS tagging are discussed later in the chapter.
 
 ### 3.4.3 Comments and Docstrings
 
-<!-- [@Takang] [@Song] -->
+NamePy handles cases where identifiers are less than 4 characters in length by looking at their corresponding docstring or above-comment. For variables, a comment on the line directly above the declaration is searched. For function names, parameter names and class names, the corresponding docstring is searched. When NamePy determines that the length of an identifier is too short, it first checks to see if the identifier is named inside the associated comment/docstring before producing an error. If it is named, no error is thrown. If it is not named, an error will be thrown that advises the user to either lengthen the identifier or mention it in a corresponding comment/docstring. The reasoning behind this stems from the fact that there are some names that are sufficient or necessary to consist of 3 or less characters. This is an acceptable practice so long as the identifier is still adequately described. Thus, if the name itself is not descriptive, the comment/docstring should be. Section 2.5 quoted Takang et al. when it was stated in their study that "if the comments did not provide any new information that is not already conveyed in the identifier names, then the effect would be insignificant considering that exactly one of them would do just as well" [@Takang]. The takeaway from this information is that comments are only significant when they present new information. Therefore, if an identifier is descriptive on its own, then a comment is not needed to describe it again. On the other hand, if an identifier is not descriptive, a comment is needed to do so, effectively leveraging only one source of description.
 
 ### 3.4.4 Evaluation Score
+
+The final feature of NamePy takes into account all of the errors produced by the three other features. When a file is evaluated by the tool, a score out of 10.00 is given based on the amount of errors that were produced (similar to `Pylint`). This score is calculated by comparing the number of possible errors to the number of actual errors. An overall score stating the success-value of passing NamePy is beneficial to show users a snapshot of their evaluation.
 
 ### 3.4.5 Feature Comparison
 
@@ -276,9 +269,10 @@ The following table displays the differences in features between NamePy and thre
 
 The feature comparison table highlights the main features of NamePy next to `pylint`, `flake8` and `pycodestyle`. The ability to run in a continuous integration workflow will be discussed later in the chapter. It is an important feature for any linter to have, so it is present in all four. Checking for PEP8 naming conventions was initially going to be a part of the feature set, but it was decided against due to the fact the NamePy is not a style tool. In addition, NamePy is aimed to have a unique feature set. To lint PEP8 naming conventions, `pylint` is an excellent tool to do so. The topics of identifier length, grammar and associated comments were mentioned in the previous `Related Works` section. Because these three features analyze identifiers in a way that research suggests is effective, they are unique to NamePy. This is where the key difference lies. Unlike the three other linters, NamePy's feature set is not within a technical scope. Rather, it is more suggestive in nature for the purpose of developing beneficial habits at the novice level. Finally, an evaluation score based on the amount of errors in a program is a feature that both NamePy and `pylint` possess, but not `flake8` or `pycodestyle`.
 
-### 3.4.6 Features Excluded
+### 3.4.6 Features Excluded/Limitations
 
 - features not implemented+limitations of current features
+- spacy being wrong
 
 ## 3.5 Levels of Implementation
 

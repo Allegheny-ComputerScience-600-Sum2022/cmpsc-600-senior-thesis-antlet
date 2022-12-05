@@ -308,7 +308,7 @@ Like other open source linters, this tool has the capacity to be installed local
 
 ## 3.6 Installing NamePy
 
-Describe install once tool is published to Pypi.
+Describe install once tool is published to Pypi.\
 
 ## 3.7 Reporting Results
 

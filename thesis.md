@@ -258,14 +258,14 @@ The final feature of NamePy takes into account all of the errors produced by the
 
 The following table displays the differences in features between NamePy and three other popular linters. It defines the feature set that NamePy possesses and compares it to the others in order to show both similarities and singularity.
 
-| Feature                                      | NamePy | pylint | flake8 | pycodestyle |
-|----------------------------------------------|--------|--------|--------|-------------|
-| Ability to Run in GitHub Actions             | ✓      | ✓      | ✓      | ✓           |
-| Enforce PEP8 Naming Conventions              | ✗      | ✓      | ✗      | ✗           |
-| Check Identifier Length                      | ✓      | ✗      | ✗      | ✗           |
-| Check Identifier Grammar                     | ✓      | ✗      | ✗      | ✗           |
-| Check for Identifiers w/ Associated Comments | ✓      | ✗      | ✗      | ✗           |
-| Error Evaluation Score                       | ✓      | ✓      | ✗      | ✗           |
+| Feature                                      | NamePy       | pylint       | flake8       | pycodestyle  |
+|----------------------------------------------|--------------|--------------|--------------|--------------|
+| Ability to Run in GitHub Actions             | $\checkmark$ | $\checkmark$ | $\checkmark$ | $\checkmark$ |
+| Enforce PEP8 Naming Conventions              | x            | $\checkmark$ | x            | x            |
+| Check Identifier Length                      | $\checkmark$ | x            | x            | x            |
+| Check Identifier Grammar                     | $\checkmark$ | x            | x            | x            |
+| Check for Identifiers w/ Associated Comments | $\checkmark$ | x            | x            | x            |
+| Error Evaluation Score                       | $\checkmark$ | $\checkmark$ | x            | x            |
 
 The feature comparison table highlights the main features of NamePy next to `pylint`, `flake8` and `pycodestyle`. The ability to run in a continuous integration workflow will be discussed later in the chapter. It is an important feature for any linter to have, so it is present in all four. Checking for PEP8 naming conventions was initially going to be a part of the feature set, but it was decided against due to the fact the NamePy is not a style tool. In addition, NamePy is aimed to have a unique feature set. To lint PEP8 naming conventions, `pylint` is an excellent tool to do so. The topics of identifier length, grammar and associated comments were mentioned in the previous `Related Works` section. Because these three features analyze identifiers in a way that research suggests is effective, they are unique to NamePy. This is where the key difference lies. Unlike the three other linters, NamePy's feature set is not within a technical scope. Rather, it is more suggestive in nature for the purpose of developing beneficial habits at the novice level. Finally, an evaluation score based on the amount of errors in a program is a feature that both NamePy and `pylint` possess, but not `flake8` or `pycodestyle`.
 
@@ -308,7 +308,7 @@ Like other open source linters, this tool has the capacity to be installed local
 
 ## 3.6 Installing NamePy
 
-Describe install once tool is published to Pypi.\
+Describe install once tool is published to Pypi.
 
 ## 3.7 Reporting Results
 
@@ -317,6 +317,42 @@ Describe install once tool is published to Pypi.\
 ### 3.7.2 Ignoring Messages
 
 ### 3.7.3 Success Message
+
+# Chapter 4 Experimental Results
+
+Data:
+
+Beginner:
+https://github.com/jesslynne73/Intro-to-Python
+https://github.com/bloominstituteoftechnology/Sprint-Challenge--Intro-Python
+https://github.com/bloominstituteoftechnology/Intro-Python-II
+https://github.com/bnlitin/intro-to-python-rice
+
+Intermediate:
+https://github.com/jesslynne73/Intermediate-Python
+https://github.com/bloominstituteoftechnology/Sprint-Challenge--Graphs
+https://github.com/utsav507/python-projects
+https://github.com/allegheny-college-cmpsc-400-fall-2022
+
+Advanced:
+https://github.com/explosion/spaCy
+https://github.com/Instagram/LibCST
+https://github.com/PyCQA/pylint
+https://github.com/PyCQA/flake8
+
+## 4.1 Experimental Design
+
+## 4.2 Evaluation
+
+## 4.3 Threats to Validity
+
+# Chapter 5 Conclusion
+
+## 5.1 Summary of Results
+
+## 5.2 Future Work
+
+## 5.3 Ethical Implications
 
 # References
 

@@ -258,6 +258,8 @@ The final feature of NamePy takes into account all of the errors produced by the
 
 The following table displays the differences in features between NamePy and three other popular linters. It defines the feature set that NamePy possesses and compares it to the others in order to show both similarities and singularity.
 
+Table: Feature comparison across linters
+
 | Feature                                      | NamePy       | pylint       | flake8       | pycodestyle  |
 |----------------------------------------------|--------------|--------------|--------------|--------------|
 | Ability to Run in GitHub Actions             | $\checkmark$ | $\checkmark$ | $\checkmark$ | $\checkmark$ |
@@ -320,35 +322,173 @@ Describe install once tool is published to Pypi.
 
 # Chapter 4 Experimental Results
 
-Data:
-
-Beginner:
-https://github.com/jesslynne73/Intro-to-Python
-https://github.com/bloominstituteoftechnology/Sprint-Challenge--Intro-Python
-https://github.com/bloominstituteoftechnology/Intro-Python-II
-https://github.com/bnlitin/intro-to-python-rice
-
-Intermediate:
-https://github.com/jesslynne73/Intermediate-Python
-https://github.com/bloominstituteoftechnology/Sprint-Challenge--Graphs
-https://github.com/utsav507/python-projects
-https://github.com/allegheny-college-cmpsc-400-fall-2022
-
-Advanced:
-https://github.com/explosion/spaCy
-https://github.com/Instagram/LibCST
-https://github.com/PyCQA/pylint
-https://github.com/PyCQA/flake8
-
 ## 4.1 Experimental Design
+
+With all of NamePy's features implemented and explained, an experiment is necessary to evaluate their effect when applied to source code. This section discusses the design of this experiment along with its results and any threats to its validity.
+
+### 4.1.1 Approach Overview
+
+Since NamePy is designed to evaluate the source code of novice Python developers, it is necessary to design the experiment based on real programs written by those novices. Though, solely leveraging novice code would not be sufficient to prove the tool's purpose. The goal of NamePy is to aid novice developers with creating good identifier-naming habits. This should ultimately eliminate any dependency of NamePy. Knowing this, source code that has been written at higher experience levels should theoretically score higher than the novice level.
+
+In this experiment, 3 levels are evaluated: beginner, intermediate and advanced source code. NamePy runs on each sample and the results are collected for evaluation.
+
+### 4.1.2 Choosing a Sample
+
+Without the use of human participants, GitHub's open source repositories were leveraged to collect source code samples for each level. Each level required different types of repositories to find adequate Python files to use with NamePy. Files were chosen at random from the files belonging to the repositories explained below.
+
+#### **Beginner Files**
+
+Locating repositories that contain beginner-level Python files was the most challenging due to the fact that most GitHub users prefer to keep their novice code in private repositories. Extensive searching was required to find samples. The first 2 repositories that files were extracted from were personal accounts. Two particular users described their work as intro-level (seemingly created during their time in an educational setting). Upon review of the repositories, it was determined that their source code was sufficient and beginner-level. The second 2 repositories that files were extracted from belonged to the `bloominstituteoftechnology` organization. The 2 in question were labeled as `Sprint-Challenge--Intro-Python` and `Intro-Python-II`. Pull requests made by hundreds of beginner-students that exist in these repositories were extracted for samples.
+
+#### **Intermediate Files**
+
+Locating repositories that contain intermediate-level Python files was similarly challenging compared to the beginner-level. For this, 2 particular repositories were leveraged that directly stemmed from the beginner-level. One such repository is in the `bloominstituteoftechnology` organization. It is another sprint challenge that is described as being assigned to students who already have intro-level experience in Python. The other repository comes from one of the same personal user accounts that was leveraged for the beginner level. This is described as work that was done by the user at an intermediate level (seemingly created during their time in an educational setting). The other two repositories used for sample files are also from personal users who have made their programs public.
+
+#### **Advanced Files**
+
+To locate repositories that contain advanced-level Python files, it seemed only appropriate to use the tools that NamePy leverages as well as tools that NamePy is compared to. `LibCST` and `Spacy` are two libraries that NamePy relies on, so files were chosen from their repositories. `Pylint` and `Flake8` are two popular linters that NamePy is comparable to, so they were also used in data sampling.
 
 ## 4.2 Evaluation
 
+### 4.2.1 Data Collection
+
+Evaluating NamePy with the collected files is as simple process that requires two main steps: (1) Run NamePy on each file individually and (2) Record the results. From there, conclusions can be drawn about trends in the produced results. The important results that were recorded in this evaluation include:
+
+- Evaluation score
+
+**Number of Each:**
+
+- Found assignment-statement variables
+- Found function definitions
+- Found class definitions
+- Found function parameters
+
+**Number of Each Error:**
+
+- Variable too long
+- Variable too short
+- Variable does not contain noun
+- Function definition too long
+- Function definition too short
+- Function definition does not contain verb
+- Class definition too long
+- Class definition too short
+- Class definition does not contain noun
+- Function parameter too long
+- Function parameter too short
+- Function parameter does not contain noun
+
+Each instance as well as the value associated with it was dumped into a `json` format to be easily read and recorded. An example of this `json` output can be seen below.
+
+```
+Your code has been rated a 8.91/10.00
+
+{
+    "Assign": 226,
+    "FunctionDef": 83,
+    "ClassDef": 5,
+    "Parameter": 156
+} {
+    "Assign_Too_Long": 0,
+    "Assign_Too_Short": 27,
+    "Assign_No_Noun": 13,
+    "Function_Too_Long": 0,
+    "Function_Too_Short": 0,
+    "Function_No_Verb": 32,
+    "Class_Too_Long": 0,
+    "Class_Too_Short": 0,
+    "Class_No_Noun": 0,
+    "Param_Too_Long": 0,
+    "Param_Too_Short": 15,
+    "Param_No_Noun": 15
+}
+```
+
+### 4.2.2 Results
+
+The data collected in the manner previously described is visualized first with a set of graphs that show simple trends among the three tested levels. It is then broken apart and put into tables that more accurately show patterns in the results.
+
+#### **Expected Results**
+
+The expected result of this experiment is thought to show a linear trend. The beginner level should hold the lowest evaluation score, the intermediate level should hold the second highest evaluation score and the advanced level should hold the highest evaluation score. This will show that NamePy has the capability to improve novice source code. By higher-level programs being rated well, this proves that a linter like NamePy could have theoretically aided in getting them to that point.
+
+#### **Number of Identifiers**
+
+![Average Evaluation Scores for Each Level](images/average-rating.png)
+
+As shown in Figure 6, the average rating for the beginner level is 8.78 and the standard deviation is 1.07. The average rating for the intermediate level is 8.82 and the standard deviation is 0.69. The average rating for the advanced level is 8.65 and the standard deviation is 0.47. These results do not align with the expected results of this experiment. The initial rise in the score from beginner to intermediate levels is promising, but the sudden fall of the advanced level skews the expected results.
+
+This unexpected result can be best explained by the fact that advanced Python developers are often either (1) Not very concerned about readability and code comprehension or (2) Following coding standards that have been set for specific projects. Advanced developers are surely aware of how to create quality identifiers, but they may not always be inclined to do so. It is for this reason that NamePy is targeted at novice developers rather than those that are more experienced.
+
+![Average Number of Assignment Variables Found for Each Level](images/assignment-variables.png)
+
+As shown in Figure 7, the average number of assignment-statement variables for the beginner level is 10.00 and the standard deviation is 9.97. The average number of assignment-statement variables for the intermediate level is 22.95 and the standard deviation is 15.98. The average number of assignment-statement variables for the advanced level is 35.15 and the standard deviation is 53.00.
+
+![Average Number of Function Definitions Found for Each Level](images/function-defs.png)
+
+As shown in Figure 8, the average number of function definitions for the beginner level is 3.3 and the standard deviation is 4.60. The average number of function definitions for the intermediate level is 6.9 and the standard deviation is 6.37. The average number of function definitions for the advanced level is 16.00 and the standard deviation is 18.06.
+
+![Average Number of Class Definitions Found for Each Level](images/class-defs.png)
+
+As shown in Figure 9, the average number of class definitions for the beginner level is 1.15 and the standard deviation is 2.13. The average number of class definitions for the intermediate level is 0.7 and the standard deviation is 0.98. The average number of class definitions for the advanced level is 3.5 and the standard deviation is 7.83.
+
+![Average Number of Function Parameters Found for Each Level](images/function-params.png)
+
+As shown in Figure 10, the average number of function parameters for the beginner level is 4.5 and the standard deviation is 6.22. The average number of function parameters for the intermediate level is 8.55 and the standard deviation is 8.57. The average number of function parameters for the advanced level is 31.45 and the standard deviation is 33.61.
+
+#### **Number of Errors**
+
+Table: Average number of errors for each experience level
+
+| Error                                     | Beginner | Intermediate | Advanced |
+|-------------------------------------------|----------|--------------|----------|
+| Variable too long                         | 0.00     | 0.00         | 0.00     |
+| Variable too short                        | 0.60     | 2.30         | 3.40     |
+| Variable does not contain noun            | 0.75     | 1.20         | 2.75     |
+| Function definition too long              | 0.00     | 0.00         | 0.40     |
+| Function definition too short             | 0.05     | 0.20         | 0.00     |
+| Function definition does not contain verb | 1.45     | 3.25         | 5.25     |
+| Class definition too long                 | 0.00     | 0.00         | 0.00     |
+| Class definition too short                | 0.10     | 0.00         | 0.00     |
+| Class definition does not contain noun    | 0.10     | 0.05         | 1.05     |
+| Function parameter too long               | 0.00     | 0.00         | 0.00     |
+| Function parameter too short              | 0.60     | 0.25         | 1.45     |
+| Function parameter does not contain noun  | 0.70     | 1.35         | 6.70     |
+
+Table 3 serves the same purpose as Figures 7-10, but it lists the the average numbers of errors for each level rather than the average number of total identifiers. When compared with the previous figures, a direct correlation is seen. In general, as experience level increases, the number of identifiers increases (presumably due to file size increasing) and the number of errors increases. Table 4 breaks down these numbers to show trends that do not necessarily relate to file size.
+
+Table: Ratio of identifiers to errors for each experience level
+
+| Error                                     | Beginner | Intermediate | Advanced |
+|-------------------------------------------|----------|--------------|----------|
+| Variable too long                         | 10:0.00  | 10:0.00      | 10:0.00  |
+| Variable too short                        | 10:0.60  | 10:1.00      | 10:0.97  |
+| Variable does not contain noun            | 10:0.75  | 10:0.52      | 10:0.78  |
+| Function definition too long              | 10:0.00  | 10:0.00      | 10:0.25  |
+| Function definition too short             | 10:1.52  | 10:0.29      | 10:0.00  |
+| Function definition does not contain verb | 10:4.39  | 10:4.71      | 10:3.28  |
+| Class definition too long                 | 10:0.00  | 10:0.00      | 10:0.00  |
+| Class definition too short                | 10:0.87  | 10:0.00      | 10:0.00  |
+| Class definition does not contain noun    | 10:0.87  | 10:0.71      | 10:3.00  |
+| Function parameter too long               | 10:0.00  | 10:0.00      | 10:0.00  |
+| Function parameter too short              | 10:1.33  | 10:0.29      | 10:0.46  |
+| Function parameter does not contain noun  | 10:1.56  | 10:1.58      | 10:2.13  |
+
+Table 4 best shows the trends that occur among the different errors at each experience level. Often,for example, advanced-level files produced many more errors than beginner-level files. At face-value, this seems to signify that advanced-level code contains less-descriptive identifiers. To see the true trends, Figures 7-10 are leveraged to compare the number of identifiers found and the number of errors found. Table 4 takes these comparisons and simplifies them to a ratio of `10:x`, where `10` signifies the total number of a specified identifier found and `x` signifies the number of a specified error found. This is the same type of calculation that is used by NamePy to produce evaluation scores, but in this case it is broken down by each error. Unlike Figure 6, these broken-down ratios show specific patterns rather than the overall pattern of each experience level.
+
+The `Function definition too short` error followed the expected trend amongst the three levels. It was seen the most in the beginner level and decreased to zero as it reached the advanced level. This same trend can be seen with the `Class definition too short` error and the `Function parameter too short` error. This implies that developers at the beginner level have a bigger tendency of making many of their identifiers too short with no comments or docstrings to describe them. The only two errors that follow the same trend as Figure 6 are the `Variable does not contain noun` and `Class definition does not contain noun` errors. Given that both of these are generally considered warnings rather than errors (as described in ********), it provides no real justification to the results of Figure 6.
+
+A problem that was found among novice Python developers according to Wang et al. involves the use of variable names that are too short (namely consisting of only 1 character) [@Wang]. Interestingly, the beginner level files contained the least amount of `Variable too short` errors. The higher amount of this error seen at the intermediate level may be explained by the act of short-cutting as developers realize that they can write code in a faster manner this way. The higher amount of this error seen at the advanced level may be explained by the developers' lack of concern or set standards of particular projects.
+
 ## 4.3 Threats to Validity
+
+The validity of the experimentation and evaluation of this study can be threatened by questioning the methods by which data was collected. Firstly, 60 total files to perform such an evaluation may be considered too few. The reasoning behind the selected sample size relates to the current capabilities of NamePy. As of the time of this study, NamePy does not possess the means to (1) Perform evaluation on more than one file at a time or (2) Automatically gather data produced (evaluation scores and `json` values). These limitations are discussed further in section 5.2. While a larger data sample does have the potential to produce different results, no size of data would be able to cover all of the variation that exists among Python source code. There are developers that exist in each experience level that write code very differently. By sourcing files from various different repositories on GitHub, the chance of producing results similar to this study would be the same if 60 alternate files were used. In addition, data collection from developers is only possible by utilizing those repositories that are public. A vast majority of beginner Python code is likely kept private on open source websites like GitHub. With this in mind, no matter the samples collected or the amount of samples collected, private programs are no accessible and therefore cannot be evaluated. Though this is true, it is to be expected since NamePy is largely a self-reflective tool. Rather than collecting data, it is designed to be used in the personal environment as a guide for developers. The experiment performed in this study is solely meant to show a generalization of NamePy's use at different levels.
 
 # Chapter 5 Conclusion
 
 ## 5.1 Summary of Results
+
+The research that was conducted for this study yielded the implementation of a linter that stands out from others that are popularly used among Python developers. The included features check for characteristics of identifiers that do not follow a set of standards. These standards are based on research that was conducted by various authors as discussed in Chapter 1 and 2. NamePy's implementation resulted in a tool that looks and functions similar to linters such as `pylint`. The main difference lies in the unique feature set that is intended to guide novice developers toward the creation of quality identifiers. NamePy's effectiveness was evaluated in an experiment that involved running the tool on data samples from three experience levels. Prior to th experiment, the results were expects to be linear in nature, with beginner level code scoring the lowest and intermediate and advanced levels subsequently scoring higher. The average rating for each level showed that intermediate source code scored higher than beginner, but advanced code scored the lowest of the three. This seems to be due to the fact that advanced programs often adhere to particular standards that do not necessarily adhere to NamePy's standards. One pattern that followed the expected trend was an error that is produced when identifiers are too short. For 3 out of the 4 types of identifiers that NamePy analyzes, the linear, worst-to-best trend was seen.
 
 ## 5.2 Future Work
 

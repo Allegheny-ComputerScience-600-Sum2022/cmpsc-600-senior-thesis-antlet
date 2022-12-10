@@ -2,9 +2,9 @@
 # https://maehr.github.io/academic-pandoc-template/
 
 # Project-specific values
-title: 'NamePy: An Identifier-Focused Linter for Beginning Python Developers'
+title: 'NamePy: An Identifier-Focused Linter for Novice Python Developers'
 author: 'Thomas Antle'
-date: '15 August 2022'
+date: '13 December 2022'
 firstreader: 'Douglas Luman'
 secondreader: 'Oliver Bonham-Carter'
 logo: 'images/logo'

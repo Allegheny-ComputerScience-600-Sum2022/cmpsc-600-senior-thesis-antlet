@@ -25,8 +25,8 @@ jobs:
         run: bash resize.sh
       - name: Replace standard quote chars
         run: |
-            sed -i "s/’/'/g" abstract.md
-            sed -i "s/’/'/g" thesis.md
+            sed -i "s/’/'/g; s/“/\"/g" abstract.md
+            sed -i "s/’/'/g; s/“/\"/g" thesis.md
       - name: Convert with pandoc
         run: mkdir log && mkdir output && pandoc --defaults pdf.yaml --to latex --metadata-file config.yaml --lua-filter .filters/abstract-to-meta.lua --template template/thesis.tex
       - name: Create release

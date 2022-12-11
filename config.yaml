@@ -75,3 +75,7 @@ header-includes:
       Dontyoueverhyphenateme
     }%
     ```
+  - |
+    ```{=latex}
+    \usepackage{csquotes}
+    ```

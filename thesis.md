@@ -178,17 +178,17 @@ This chapter describes the implementation of NamePy as well as the reasoning beh
 
 NamePy is designed to be used like most popular Python linters. That is, it can be used at a local level or by creating a GitHub Action to run upon pushing to a repository. Both methods are feasible for novice Python developers, but NamePy as a GitHub Action is the more standardized approach. This is considering that the tool is also aimed at Computer Science professors to implement in their students' projects. A discussion about the appropriate implementation level for NamePy can be found later in the chapter.
 
-Figure *number* shows the general workflow of NamePy being used as a GitHub Action from the perspective of a developer.
+Figure 5 shows the general workflow of NamePy being used as a GitHub Action from the perspective of a developer.
 
-*Diagram Here*
+![General workflow of NamePy used as a GitHub Action](images/flow-diagram.png)
 
-The workflow begins with the source code of a novice Python developer that needs to be evaluated. The developer then pushes their source code to the GitHub repository that it is associated with. This repository has NamePy implemented as a GitHub Action that is designed to build upon pushing. With the source code pushed, NamePy runs in the continuous integration build. Once the build completes, a report is produced that contains any errors the tool detected as well as an evaluation score. Leveraging the report, the developer corrects the errors on the specified line numbers and pushes their source code once more. This process is repeated until NamePy reports zero errors and a perfect score.
+The workflow begins with the source code of a novice Python developer that needs to be evaluated. The developer pushes their source code to the GitHub repository that it is associated with. This repository has NamePy implemented as a GitHub Action that is designed to build upon pushing. With the source code pushed, NamePy runs in the continuous integration build. Once the build completes, a report is produced that contains any errors the tool detected as well as an evaluation score. Leveraging the report, the developer corrects the errors on the specified line numbers and pushes their source code once more. This process is repeated until NamePy reports zero errors and produces a perfect score.
 
 ## 3.2 Development Environment and Toolset
 
 ### 3.2.1 Poetry
 
-Poetry is a Python tool that creates a virtual environment. It allows developers to install dependencies quickly and in an isolated environment in order to run the tool. While it is not necessary, it is the preferred approach to use the `poetry install` command when creating a GitHub Action and when running NamePy locally. Though Poetry is not necessary for the tool's functionality, the dependencies that it installs are essential.
+Poetry is a Python tool that creates a virtual environment. It allows developers to install dependencies quickly in an isolated environment to run the tool. While it is not necessary, it is the preferred approach to use the `poetry install` command when creating a GitHub Action and when running NamePy locally. Though Poetry is not necessary for the tool's functionality, the dependencies that it installs are essential.
 
 ### 3.2.2 Pytest
 
@@ -198,7 +198,7 @@ Pytest is a Python testing framework that is leveraged to create and run test ca
 
 LibCST is a library that parses Python source code as a CST (Concrete Syntax Tree) but acts like an AST (Abstract Syntax Tree). While one would normally use Python's built-in AST module to leverage syntax trees and parse them, LibCST has more to offer. Essentially, it "creates a compromise between an Abstract Syntax Tree (AST) and a traditional Concrete Syntax Tree (CST)" [@Libcst]. Unlike traditional syntax trees, this library is lossless in the sense that it has the ability to preserve all parts of the source code including things like comments, whitespace and parenthesis.
 
-The main framework for NamePy stemmed from a previous project: [CAStanet](https://github.com/cmpsc-481-s22-m1/CASTanet). This tool uses LibCST's `matchers` in order to locate nodes of specific types in source code. NamePy started this way as well, but it was refactored to use a `visitor` class instead (as can be seen in figure code segment below). In this way, it is able to traverse the whole tree in chronological order. Through each function, specific nodes for the identifiers being analyzed are extracted and conditional logic is performed.
+The main framework for NamePy originally stemmed from a previous project: [CAStanet](https://github.com/cmpsc-481-s22-m1/CASTanet). This tool uses LibCST's `matchers` in order to locate specific nodes in source code and count them. NamePy started this way as well, but it was refactored to use a `visitor` class instead. The code segment below shows how a visitor class is created. The class uses node-metadata to locate specific types of nodes as well as the information surrounding them. In the case of NamePy, those nodes consist of the 4 identifiers that are analyzed. First, the identifiers as well as their line numbers, column numbers and comments/docstrings around them are located. Then, conditional logic is applied for each instance that NamePy looks for. Unlike LibCST's `matchers`, this method allows parsing through the syntax tree in a manner that can extract node information chronologically.
 
 ```python
 class IdentifierVisitor(cst.CSTVisitor):
@@ -210,49 +210,49 @@ class IdentifierVisitor(cst.CSTVisitor):
     )
 ```
 
-This code segment creates a visitor class that uses node metadata to locate specified identifiers as well as their line and column numbers. Later in the tool's source code is a metadata wrapper that is used to associate metadata with its module.
-
 ### 3.2.4 Spacy
 
 Spacy is a Python library for advanced NLP (Natural Language Processing). NamePy leverages its POS (Part of Speech) tagging for its grammar analysis feature. The functions and limitations of this approach are discussed later in the chapter.
 
 ## 3.3 Identifiers Analyzed
 
+The four types of identifiers that NamePy analyzes are listed as follows:
+
 - Assignment Statement Variables
 - Function Definitions
 - Class Definitions
 - Function Parameters
 
-The four types of identifiers that NamePy analyzes are listed in the table above. Given that NamePy is designed for novice developers, it is not important for it to look towards every possible type of identifier. The list is comprised of the very common types that would be seen in most novice level source code. For the sake of simplicity and feasibility, the only type of variable that is analyzed is that which is declared in an assignment statement. Limitations of this approach are discussed later in the chapter. Function definitions with parameters as well as class definitions are very commonly seen amongst the Python language as a whole.
+Given that NamePy is designed for novice developers, it is not important that it looks towards every possible type of identifier. The list is comprised of the very common types that would be seen in most examples of novice level source code. For the sake of simplicity and feasibility, the only type of variable that is analyzed is that which is declared in an assignment statement. Limitations of this approach are discussed later in the chapter. Function definitions with parameters as well as class definitions are very commonly seen amongst the Python language as a whole.
 
 ## 3.4 Features
+
+The four major features that NamePy consists of are listed as follows:
 
 - Analyze Identifier Length
 - Analyze Identifier Grammar
 - Check for Associated Comments and Docstrings
 - Error Evaluation Score
 
-The table above lists the four major features that NamePy consists of.
-
 ### 3.4.1 Identifier Length
 
-Conditional statements in the functions for each type of identifier require names to be no less than 4 characters in length and restrict names from being more than 30 characters in length. The exception for identifier names being less than 4 characters is described in section 3.4.3. The minimum and maximum numbers for this feature were determined by analyzing the study performed by Wang et al.. Regarding the minimum character length, in the study, out of the 36 combined library and textbook averages of identifier lengths, the lowest average found was a singular instance of 3.0 characters [@Wang]. Every other average length resulted in values higher than 3.0, with overall averages ranging from approximately 5.0-12.0 [@Wang]. Regarding the maximum, the charts often maxed out at 20+ characters in length, with one chart maxing out at 30+ characters [@Wang]. Given the nature of the `+` symbol as well as the inclusion of values with 30+ characters due to sufficient data, I determined that 30 characters is an adequate maximum length. Figures 1-4 seen in chapter 1 display examples of the results used to make these determinations. As it was discussed in section 2.2, the idea of longer identifiers equating to more descriptive names has some truth, but a line should be drawn. I determined this maximum based on the data from professional-level libraries and textbooks leveraged in the study by Wang et al..
+Conditional statements in the functions for each type of identifier (1) Require names to be no less than 4 characters in length and (2) Restrict names from being more than 30 characters in length. The exception for identifier names being less than 4 characters is described in section 3.4.3. The minimum and maximum numbers for this feature were determined by analyzing the study performed by Wang et al.. Regarding the minimum character length, in the study, out of the 36 combined library and textbook averages of identifier lengths, the lowest average found was a singular instance of 3.0 characters [@Wang]. Every other average length resulted in values higher than 3.0, with overall averages ranging from approximately 5.0-12.0 characters [@Wang]. Regarding the maximum character length, the charts often maxed out at 20+ characters in length, with one chart maxing out at 30+ characters [@Wang]. Given the nature of the `+` symbol as well as the inclusion of values with 30+ characters (due to sufficient data in the study), 30 characters was determined to be an adequate maximum length. Figures 1-4 seen in chapter 1 display examples of the results used to make these determinations. As it was discussed in section 2.2, the idea of longer identifiers equating to more descriptive names has some truth, but a line should be drawn. This maximum was determined based on the data from professional-level libraries and textbooks leveraged in the study by Wang et al..
 
 ### 3.4.2 Identifier Grammar
 
-NamePy uses a grammatical feature with identifiers that determines their POS (Part-of-Speech). To do this, identifiers are first broken down into separate words based on their naming style. For the sake of feasibility, it must be assumed that each identifier is conforming to its standardized naming style according to PEP8. This means that variables, function definitions and function parameters should adhere to snake_case while class definitions should adhere to PascalCase. NamePy does not check for this because it is not considered to be a stylistic tool. Another linter such as `pylint` may be used to ensure correct PEP8 naming standards. Given the assumptions made, snake_case identifiers are split into separate words by their underscores while PascalCase identifiers are split into separate words by their uppercase letters. They are appended to a list which is then iterated through. With Spacy's natural language processing and with conditional logic, NamePy determines if any of the words in the list match the suggested part of speech.
+NamePy uses a grammatical feature with identifiers that determines their POS (Part-of-Speech). To do this, identifiers are first broken down into separate words based on their naming style. For the sake of feasibility, it must be assumed that each identifier is conforming to its standardized naming style according to [PEP8](https://peps.python.org/pep-0008/). This means that variables, function definitions and function parameters should adhere to the `snake_case` convention while class definitions should adhere to the `PascalCase` convention. NamePy does not check for naming style because it is not considered to be a stylistic tool. Another linter such as `pylint` may be used to ensure correct PEP8 naming standards. Given the assumptions made, `snake_case` identifiers are divided by their underscores into separate words while `PascalCase` identifiers are divided by their uppercase letters. Each word is appended to a list to which iteration is performed. With Spacy's natural language processing and with conditional logic, NamePy determines if any of the words in the list match the suggested part of speech.
 
 ![Part-of-speech patterns in a dataset of identifiers [@Newman].](images/pos-table.png)
 
-Figure 5 shows a table from the study of grammar patterns in source code identifiers by Newman et al. This study was used to determine the parts-of-speech that NamePy searches for in the 4 different types of identifiers. Newman et al. state that "Function identifiers are more likely to contain a verb and be represented by a verb phrase. Attribute, parameter, and declaration-statement identifiers typically have singular noun-phrase grammar patterns" [@Newman]. In the same way, based on the table, class names also typically have singular noun-phrase grammar patterns. Because of these findings, NamePy looks to see if any verbs exist in function names and if any nouns exist in the 3 other types of identifiers. If those parts-of-speech are not found, NamePy will produce an error. Given that the feature is based on the top POS of each type of identifier, this makes it nonabsolute. Developers can use identifier names that contain other parts-of-speech (as can be seen in Figure 5) without losing validity. NamePy is not intended to force certain parts-of-speech, but rather make suggestions based on common grammar patterns. Most commonly, identifiers should conform to this feature's standards, but there are exceptions when it is not necessary. In addition to this, limitations of Spacy's POS tagging are discussed later in the chapter.
+Figure 5 shows a table from the study of grammar patterns in source code identifiers by Newman et al. This study was used to determine the parts-of-speech that NamePy searches for in the 4 different types of identifiers. Newman et al. state that "Function identifiers are more likely to contain a verb and be represented by a verb phrase. Attribute, parameter, and declaration-statement identifiers typically have singular noun-phrase grammar patterns" [@Newman]. In the same way, based on the table, class names also typically have singular noun-phrase grammar patterns. Because of these findings, NamePy looks to see if any verbs exist in function names and if any nouns exist in the 3 remaining types of identifiers. If those parts-of-speech are not found, NamePy will produce a warning. Given that the feature is based on the top POS of each type of identifier, this makes it nonabsolute. Developers can use identifier names that contain other parts-of-speech (as can be seen in Figure 5) without losing validity. NamePy is not intended to force certain parts-of-speech, but rather make suggestions based on common grammar patterns. Most commonly, identifiers should conform to this feature's standards, but there are exceptions when it is not necessary. In addition to this, limitations of Spacy's POS tagging are discussed in section 3.4.6.
 
 ### 3.4.3 Comments and Docstrings
 
-NamePy handles cases where identifiers are less than 4 characters in length by looking at their corresponding docstring or above-comment. For variables, a comment on the line directly above the declaration is searched. For function names, parameter names and class names, the corresponding docstring is searched. When NamePy determines that the length of an identifier is too short, it first checks to see if the identifier is named inside the associated comment/docstring before producing an error. If it is named, no error is thrown. If it is not named, an error will be thrown that advises the user to either lengthen the identifier or mention it in a corresponding comment/docstring. The reasoning behind this stems from the fact that there are some names that are sufficient or necessary to consist of 3 or less characters. This is an acceptable practice so long as the identifier is still adequately described. Thus, if the name itself is not descriptive, the comment/docstring should be. Section 2.5 quoted Takang et al. when it was stated in their study that "if the comments did not provide any new information that is not already conveyed in the identifier names, then the effect would be insignificant considering that exactly one of them would do just as well" [@Takang]. The takeaway from this information is that comments are only significant when they present new information. Therefore, if an identifier is descriptive on its own, then a comment is not needed to describe it again. On the other hand, if an identifier is not descriptive, a comment is needed to do so, effectively leveraging only one source of description.
+NamePy handles cases where identifiers are 3 or less characters in length by looking at their corresponding docstring or comment. For variables, a comment on the line directly above the declaration is searched. For function names, parameter names and class names, the corresponding docstring is searched. When NamePy determines that the length of an identifier is too short, it first checks to see if the identifier is named inside the associated comment/docstring before producing an error. If it is directly named, no error is thrown. If it is not directly named, an error will be thrown that advises the user to either lengthen the identifier or directly name it in a corresponding comment/docstring. The reasoning behind this stems from the fact that there are some names that are sufficient or necessary to consist of 3 or less characters. This is an acceptable practice so long as the identifier is still adequately descriptive. Thus, if a name itself is not descriptive, the comment/docstring should be. Section 2.5 quoted Takang et al. when it was stated in their study that "if the comments did not provide any new information that is not already conveyed in the identifier names, then the effect would be insignificant considering that exactly one of them would do just as well" [@Takang]. The takeaway from this information is that comments are only significant when they present new information. Therefore, if a variable is descriptive enough on its own, then a comment is not needed to describe it again. In addition, if a function name, function parameter or class name is descriptive enough, then a docstring that directly mentions it is not needed to describe it again. On the other hand, if an identifier is not descriptive, a comment/docstring is needed to directly do so, effectively leveraging only one source of description.
 
 ### 3.4.4 Evaluation Score
 
-The final feature of NamePy takes into account all of the errors produced by the three other features. When a file is evaluated by the tool, a score out of 10.00 is given based on the amount of errors that were produced (similar to `Pylint`). This score is calculated by comparing the number of possible errors to the number of actual errors. An overall score stating the success-value of passing NamePy is beneficial to show users a snapshot of their evaluation.
+The final feature of NamePy takes into account all of the errors produced by the previously discussed features. When a file is evaluated by the tool, a score out of 10.00 is given based on the amount of errors/warnings that were produced (similar to `pylint`). This score is calculated by comparing the number of possible errors to the number of actual errors. An overall score stating the success-value of passing NamePy is beneficial to show users a snapshot of their evaluation.
 
 ### 3.4.5 Feature Comparison
 
@@ -260,35 +260,36 @@ The following table displays the differences in features between NamePy and thre
 
 Table: Feature comparison across linters
 
-| Feature                                      | NamePy       | pylint       | flake8       | pycodestyle  |
-|----------------------------------------------|--------------|--------------|--------------|--------------|
-| Ability to Run in GitHub Actions             | $\checkmark$ | $\checkmark$ | $\checkmark$ | $\checkmark$ |
-| Enforce PEP8 Naming Conventions              | x            | $\checkmark$ | x            | x            |
-| Check Identifier Length                      | $\checkmark$ | x            | x            | x            |
-| Check Identifier Grammar                     | $\checkmark$ | x            | x            | x            |
-| Check for Identifiers w/ Associated Comments | $\checkmark$ | x            | x            | x            |
-| Error Evaluation Score                       | $\checkmark$ | $\checkmark$ | x            | x            |
+| Feature                                                 | NamePy       | pylint       | flake8       | pycodestyle  |
+|---------------------------------------------------------|--------------|--------------|--------------|--------------|
+| Ability to Run in GitHub Actions                        | $\checkmark$ | $\checkmark$ | $\checkmark$ | $\checkmark$ |
+| Enforce PEP8 Naming Conventions                         | x            | $\checkmark$ | x            | x            |
+| Check Identifier Length                                 | $\checkmark$ | x            | x            | x            |
+| Check Identifier Grammar                                | $\checkmark$ | x            | x            | x            |
+| Check for Identifiers w/ Associated Comments/Docstrings | $\checkmark$ | x            | x            | x            |
+| Error Evaluation Score                                  | $\checkmark$ | $\checkmark$ | x            | x            |
 
-The feature comparison table highlights the main features of NamePy next to `pylint`, `flake8` and `pycodestyle`. The ability to run in a continuous integration workflow will be discussed later in the chapter. It is an important feature for any linter to have, so it is present in all four. Checking for PEP8 naming conventions was initially going to be a part of the feature set, but it was decided against due to the fact the NamePy is not a style tool. In addition, NamePy is aimed to have a unique feature set. To lint PEP8 naming conventions, `pylint` is an excellent tool to do so. The topics of identifier length, grammar and associated comments were mentioned in the previous `Related Works` section. Because these three features analyze identifiers in a way that research suggests is effective, they are unique to NamePy. This is where the key difference lies. Unlike the three other linters, NamePy's feature set is not within a technical scope. Rather, it is more suggestive in nature for the purpose of developing beneficial habits at the novice level. Finally, an evaluation score based on the amount of errors in a program is a feature that both NamePy and `pylint` possess, but not `flake8` or `pycodestyle`.
+The feature comparison table highlights the main features of NamePy next to `pylint`, `flake8` and `pycodestyle`. The ability to run in a continuous integration workflow is discussed in section 3.5. Given that it is an important feature for any linter to have, so it is present in all four. Checking for PEP8 naming conventions was initially going to be a part of the feature set, but it was decided against due to the fact the NamePy is not a stylistic tool. In addition, NamePy is aimed to have a unique feature set. To lint PEP8 naming conventions, `pylint` is an excellent tool. The topics of identifier length, grammar and associated comments/doctrings were discussed in chapters 2 and 3. Because these three features analyze identifiers in a way that research suggests is effective, they are unique to NamePy. This is where the key difference lies. Unlike the three other linters, NamePy's feature set is not within a technical scope. Rather, it is more suggestive in nature for the purpose of developing beneficial habits at the novice level. Finally, an evaluation score based on the amount of errors in a program is a feature that both NamePy and `pylint` possess, but not `flake8` or `pycodestyle`. While it is not unique, it is necessary to encompass the three previous features.
 
-### 3.4.6 Features Excluded/Limitations
+### 3.4.6 Feature Limitations
 
-- features not implemented+limitations of current features
-- spacy being wrong
+All of NamePy's features are concrete and do precisely as they are intended with the exception of grammar-checking. By leveraging Spacy to detect parts-of-speech in identifiers, there is an inherent margin of error. This is because it is not possible to provide Spacy with the full context of each word that it analyzes. For this reason, its part-of-speech tagging may be incorrect at times. An example of this is of a variable named `greeting`. Spacy could see the word as a verb (as in, greeting somebody) or as a noun (as in, the greeting message of a program). Without the full context (like in a sentence), it is not possible to determine the correct tag. There are also many instances of identifiers being named with shortened words that still convey meaning, but do not directly translate to english vocabulary. For example, in a variable named `object_num`, the word `num` may not be tagged correctly by Spacy because it is not a legitimate english word. The inaccuracy of Spacy in certain instances adds to the reasoning for warning users of grammar mistakes rather than producing errors.
+
+Other limitations of NamePy relate to the way that certain identifiers are used in Python source code. Firstly, lambda parameters are unable to be handled. Secondly, multiple variables that are assigned on the same line are unable to be handled. Lastly, variables with any other piece of information attached to them are unable to be handled. An example of this is when attributes of a class are accessed with `self.variable_name`. NamePy is only able to handle instances where `variable_name = ...`. These limitations exist due to the way that LibCST allows access to nodes. Handling these exceptions is possible, but it was not feasible for the timeline of NamePy. Refer to section 5.2 for more information about future work.
 
 ## 3.5 Levels of Implementation
 
-The level of implementation that best suites NamePy was thoroughly considered throughout the research process. It was ultimately decided that the tool is best fit for the continuous integration level with the added ability to run it locally. The following sections discuss the reasoning for this decision.
+The level of implementation that best suites NamePy was thoroughly considered throughout the research process. It was ultimately decided that the tool is best fit for the continuous integration level with the added ability to run locally. The following sections discuss the reasoning for this decision.
 
 ### 3.5.1 IDE Level
 
-IDE's (Integrated Development Environments) are software applications that are leveraged by most developers to manipulate source code. Given the popularity and versatility of Visual Studio Code, I am choosing to use it to discuss linting at the IDE level. VSCode extensions is a large feature that gives the software application a lot of its versatility. Users are able to quickly and simply search for and install extensions that can be found on the extension marketplace.
+IDE's (Integrated Development Environments) are software applications that are leveraged by most developers to manipulate source code. Given the popularity and versatility of Visual Studio Code, I am choosing to use it to discuss linting at the IDE level. `VSCode Extensions` is a large feature that gives the software application a lot of its versatility. Users are able to quickly and simply search for and install extensions that can be found on the extension marketplace.
 
 ![Extension Marketplace on Visual Studio Code](images/vscode-extensions.jpg)
 
 What is beneficial about linting at this level is the very short length of time between making an error, identifying and fixing it. A participant in a study performed by Tómasdóttir et al. stated that "If you can get some bugs away from your code so early as when you write it, it’s great" [@Tomasdottir]. The rigidity of this concept can be seen by the sheer amount of VSCode extensions that exist for the purpose of catching errors as they are written. By shortening the time between making a mistake and finding/fixing it, the hardship of fixing them when they are found during compile or runtime is decreased [@Tomasdottir].
 
-Considering lower-level, novice developers, it is important to look at how catching errors at the IDE level affects learning. In general, "corrective feedback is proven to be very useful in terms of acquiring further cognitive skills." Obermüller et al. also states how "positive feedback is considered to have better effects on motivational aspects than negative feedback" [@Obermuller]. Linters are inherently negative/corrective in nature, so they will always have some sort of negative impact on student motivation. Though, IDE errors appear in a very slow, one-by-one fashion compared to linters at the CI level. This suggests minimal negative impact on student motivation while maintaining corrective feedback to acquire further cognitive skills.
+Considering lower-level, novice developers, it is important to look at how catching errors at the IDE level affects learning. In general, "corrective feedback is proven to be very useful in terms of acquiring further cognitive skills" [@Obermuller]. Obermüller et al. also states how "positive feedback is considered to have better effects on motivational aspects than negative feedback" [@Obermuller]. Linters are inherently negative/corrective in nature, so they will always have some sort of negative impact on student motivation. Though, IDE errors appear in a very slow, one-by-one fashion compared to linters at the CI level. This suggests minimal negative impact on student motivation while maintaining corrective feedback to acquire further cognitive skills.
 
 Despite the above information, the IDE level is not the ideal level to apply the tool with students due to cognitive complexity. When comparing the time of linting between the IDE level and a separate level (such as GitHub Actions), it can be seen that there is a higher cognitive complexity at the time of the IDE. This is due to the fact that the given task at the IDE level is to write code. By adding a linter at the same time, the difficulty of that task is increased due to the fact that errors are presented at the time of writing. Robinson presents in his article that "The effects of complexity differentials should be revealed by the fact that the cognitively simpler, less resource-demanding task will involve a lower error rate, and/or be completed faster, and be less susceptible to interference from competing tasks than the more complex task" [@Robinson]. This is important due to the fact that students will have a higher error rate given higher cognitive complexity when coding. Since the goal of the tool is to help students improve their source code, implementing it in a way that is too complex may hurt them instead.
 
@@ -296,29 +297,73 @@ Despite the above information, the IDE level is not the ideal level to apply the
 
 While the IDE level of linting possesses many tools that developers use to address feedback, NamePy is intended for students, so evaluation is more important than formative feedback. IDE level linting is not normally capable of providing evaluation metrics, so a different route would be required. Implementation of the tool in a similar manner as `Pylint` for instance (the ability to run the linter in a VSCode window upon saving) would provide an evaluation, but this integration does not fit the scope of the project. Rather, the use of GitHub Actions is a better choice to provide evaluative feedback to student developers.
 
-Referring back to Vee, in addition to the fact that coding is a literacy, she also enforces the fact that literacy is developed (or learned) and not inherent. Suggesting both that literacy is a learned skill and that this is especially prevalent in students, Vee states that "Sophisticated literacy skills such as analysis and argument have always been necessary at the highest educational echelons, but we now expect all students to achieve this level of skill under the rubric of literacy" [@Vee]. This is an important connection to make considering the evaluative nature of NamePy. Student developers require evaluation on their work because they are constantly learning.
+Referring back to Annette Vee, in addition to the fact that coding is a literacy, she also enforces the fact that literacy is developed (or learned) and not inherent [@Vee]. Suggesting both that literacy is a learned skill and that this is especially prevalent in students, Vee states that "Sophisticated literacy skills such as analysis and argument have always been necessary at the highest educational echelons, but we now expect all students to achieve this level of skill under the rubric of literacy" [@Vee]. This is an important connection to make considering the evaluative nature of NamePy. Student developers require evaluation on their work because they are constantly learning.
 
 Keeping in mind that coding is a literacy, Sommers provides insight based on his research on student writers. He found that students often did not revise their work because they lacked "a set of strategies to help them identify the "something larger" that they sensed was wrong and work from there" [@Villanueva]. In the same way, IDE level visualization of errors do not always help students learn how to revise their code. Rather, evaluation metrics at the GitHub Actions level would help students learn their mistakes and correct them in a "fixing something larger" manner. This is what makes the CI level optimal for this application.
 
 #### 3.5.3 GitHub Actions
 
-Identical to popular linters such as `Pylint` the tool can be inserted into GitHub Action workflows for automation. This does not require any additional implementation to the tool itself. To do so, a `.yml` file can be created that installs and runs the tool on the given files/directories inside of a virtual environment. GitHub's documentation provides information for any developer to be able to implement the tool in this manner. Including the tool in a class of students' continuous integration build would be beneficial because it would set a standard of linting that would be followed by the whole class. Compared to running it locally, putting the tool in a build workflow would take away the manual labor and therefore make it easier and more useful. For student developers this is also a good option because instructors can create workflows incorporating it. In this way students do not have to do any extra work and they are able to automatically see errors as they appear in GitHub.
+Identical to popular linters such as `Pylint`, the tool can be inserted into GitHub Action workflows for automation. This does not require any additional implementation to the tool itself. To do so, a `.yml` file can be created that installs and runs the tool on the given file(s) inside of a virtual environment. GitHub's documentation provides information for any developer to be able to implement the tool in this manner. Including the tool in a class of students' continuous integration build would be beneficial because it would set a standard of linting that would be followed by the whole class. Compared to running it locally, putting the tool in a build workflow would take away the manual labor and therefore make it easier and more useful. For student developers this is also a good option because instructors can create workflows incorporating it. In this way students do not have to do any extra work and they are able to automatically see errors as they appear in GitHub.
 
 ### 3.5.4 Local Use
 
-Like other open source linters, this tool has the capacity to be installed locally on machines and be ran with software projects that students work on. It is available on PyPI for users to install with the `pip` command and it has the capacity to run in a similar manner to other linters such as `Pylint`. This method of using the tool is the most basic for student developers. Given that it is the same process as other popular linters, it is expected that any user will know how to use it given the documentation. Though it is the most basic, it does not offer any sort of automation. In order to check for linting errors, the user would need to manually run the tool every time they wished to check their work. Initial setup of the tool is the most simplistic compared to the previous two levels, but continued use of it is the most time-demanding. It will remain as a standard way to use the tool for any user that wishes to do so, but leveraging GitHub Actions is recommended.
+Like other open source linters, this tool has the capacity to be installed locally on machines and be ran with software projects that developers work on. It is available on PyPI for users to install with the `pip` command and it has the capacity to run in a similar manner to other linters such as `Pylint`. This method of using the tool is the most basic for novice developers. Given that it is the same process as other popular linters, it is expected that any user will know how to use it given the documentation. Though it is the most basic, it does not offer any sort of automation. In order to check for linting errors, the user needs to manually run the tool every time they wish to check their work. Initial setup of the tool is the most simplistic compared to the previous two levels, but continued use of it is the most time-demanding. It will remain as a standard way to use the tool for any user that wishes to do so, but leveraging GitHub Actions is recommended.
 
-## 3.6 Installing NamePy
+## 3.6 Reporting Results
 
-Describe install once tool is published to Pypi.
+### 3.6.1 Error Messages
 
-## 3.7 Reporting Results
+Each error message that is produced follows the same format:
 
-### 3.7.1 Error Messages
+```
+{file path}:{line number}:{column number}: {identifier type} {variable name} is of length {character length} -- {Instruction}
+```
 
-### 3.7.2 Ignoring Messages
+The 4 identifier types consist of:
 
-### 3.7.3 Success Message
+- Variable
+- Function
+- Class
+- Parameter
+
+The 3 possible instructions consist of:
+
+- Reduce length.
+- Add a comment or increase length.
+- Add to docstring or increase length.
+
+An example of an error message can be seen below.
+
+```
+test_files/test_file.py:17:8: Variable 'x' is of length 1 -- Add a comment or increase length.
+```
+
+### 3.6.2 Warning Messages
+
+Each warning message that is produced follows the same format:
+
+```
+{file path}:{line number}:{column number}: (Warning) with {identifier type} {variable name} -- {Instruction}
+```
+
+The 2 possible instructions consist of:
+
+- Consider using a noun
+- Consider using a verb
+
+An example of a warning message can be seen below.
+
+```
+test_files/test_file.py:10:8: (Warning) with function 'function_one' -- Consider using a verb.
+```
+
+### 3.6.3 Evaluation Score
+
+At the end of each report is an evaluation score that rates the code out of 10.00. An example rating can be seen below.
+
+```
+Your code has been rated a 5.94/10.00
+```
 
 # Chapter 4 Experimental Results
 
@@ -491,6 +536,10 @@ The validity of the experimentation and evaluation of this study can be threaten
 The research that was conducted for this study yielded the implementation of a linter that stands out from others that are popularly used among Python developers. The included features check for characteristics of identifiers that do not follow a set of standards. These standards are based on research that was conducted by various authors as discussed in Chapter 1 and 2. NamePy's implementation resulted in a tool that looks and functions similar to linters such as `pylint`. The main difference lies in the unique feature set that is intended to guide novice developers toward the creation of quality identifiers. NamePy's effectiveness was evaluated in an experiment that involved running the tool on data samples from three experience levels. Prior to th experiment, the results were expects to be linear in nature, with beginner level code scoring the lowest and intermediate and advanced levels subsequently scoring higher. The average rating for each level showed that intermediate source code scored higher than beginner, but advanced code scored the lowest of the three. This seems to be due to the fact that advanced programs often adhere to particular standards that do not necessarily adhere to NamePy's standards. One pattern that followed the expected trend was an error that is produced when identifiers are too short. For 3 out of the 4 types of identifiers that NamePy analyzes, the linear, worst-to-best trend was seen.
 
 ## 5.2 Future Work
+
+- ignoring errors
+- handling the feature limitations
+- handle directories
 
 ## 5.3 Ethical Implications
 

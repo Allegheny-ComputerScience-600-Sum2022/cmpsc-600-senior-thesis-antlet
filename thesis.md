@@ -316,7 +316,11 @@ Like other open source linters, this tool has the capacity to be installed local
 Each error message that is produced follows the same format:
 
 ```
-{file path}:{line number}:{column number}: {identifier type} {variable name} is of length {character length} -- {Instruction}
+{file path}:{line number}:{column number}: {identifier type}
+```
+
+```
+{variable name} is of length {character length} -- {Instruction}
 ```
 
 The 4 identifier types consist of:
@@ -335,7 +339,11 @@ The 3 possible instructions consist of:
 An example of an error message can be seen below.
 
 ```
-test_files/test_file.py:17:8: Variable 'x' is of length 1 -- Add a comment or increase length.
+test_files/test_file.py:17:8: Variable 'x' is of length 1 --
+```
+
+```
+Add a comment or increase length.
 ```
 
 ### 3.6.2 Warning Messages
@@ -343,7 +351,11 @@ test_files/test_file.py:17:8: Variable 'x' is of length 1 -- Add a comment or in
 Each warning message that is produced follows the same format:
 
 ```
-{file path}:{line number}:{column number}: (Warning) with {identifier type} {variable name} -- {Instruction}
+{file path}:{line number}:{column number}: (Warning) with
+```
+
+```
+{identifier type} {variable name} -- {Instruction}
 ```
 
 The 2 possible instructions consist of:
@@ -354,7 +366,11 @@ The 2 possible instructions consist of:
 An example of a warning message can be seen below.
 
 ```
-test_files/test_file.py:10:8: (Warning) with function 'function_one' -- Consider using a verb.
+test_files/test_file.py:10:8: (Warning) with function 'function_one'
+```
+
+```
+-- Consider using a verb.
 ```
 
 ### 3.6.3 Evaluation Score

@@ -553,10 +553,19 @@ The research that was conducted for this study yielded the implementation of a l
 
 ## 5.2 Future Work
 
-- ignoring errors
-- handling the feature limitations
-- handle directories
-- x
+Several additions to NamePy that were not in the scope of this project can be made in order to increase its effectiveness. These additions include added/modified features as well as further evaluation.
+
+**Expanding Feature Set**
+
+NamePy is currently only able to take in single file paths. The ability to handle directories containing multiple files is a very useful feature that is necessary to implement for the future.
+
+Another feature that developers would benefit from is the ability to ignore specific errors. Because any given error produces a non-zero exit code, it is not possible to have a passing GitHub Actions build unless all errors are resolved. There are certain circumstances where developers may have good reason to write identifiers in a way that does not conform to NamePy's standards. In these cases, it would be useful to ignore specific identifiers with a comment or flagging feature.
+
+Finally, limitations discussed in section 3.4.6 would be beneficial to resolve. There are many instances (even in novice Python programs) where developers declare several variables in one line of code or class attributes are leveraged in declarations. Because NamePy cannot currently handle these exceptions, relevant identifiers are ignored. The ability to look at all of these instances will make NamPy much more effective.
+
+**Evaluation**
+
+A second evaluation that is similar to the evaluation completed in chapter 4
 
 ## 5.3 Ethical Implications
 

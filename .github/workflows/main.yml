@@ -7,6 +7,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Install FUSE
+        run: |
+          sudo add-apt-repository universe
+          sudo apt install libfuse2
       - name: Install pandoc
         uses: nikeee/setup-pandoc@v1
       - name: Install pandoc-citeproc
@@ -19,8 +23,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Resize images
         run: bash resize.sh
+      - name: Replace standard quote chars
+        run: bash textfix.sh
       - name: Convert with pandoc
-        run: mkdir log && mkdir output && pandoc --defaults pdf.yaml --to latex --metadata-file config.yaml --lua-filter .filters/abstract-to-meta.lua --template template/thesis.tex
+        run: cat abstract.md && mkdir log && mkdir output && pandoc --defaults pdf.yaml --to latex --metadata-file config.yaml --lua-filter .filters/abstract-to-meta.lua --template template/thesis.tex
       - name: Create release
         id: create_release
         uses: actions/create-release@v1

@@ -2,11 +2,11 @@
 # https://maehr.github.io/academic-pandoc-template/
 
 # Project-specific values
-title: 'Senior Thesis'
-author: 'Student Name'
-date: '22 July 2022'
-firstreader: 'First Reader'
-secondreader: 'Second Reader'
+title: 'NamePy: An Identifier-Focused Linter for Novice Python Developers'
+author: 'Thomas Antle'
+date: '18 December 2022'
+firstreader: 'Mr. Douglas Luman'
+secondreader: 'Dr. Oliver Bonham-Carter'
 logo: 'images/logo'
 
 # Template Values: DO NOT TOUCH
@@ -74,4 +74,8 @@ header-includes:
       Hyphenate-me-like-this
       Dontyoueverhyphenateme
     }%
+    ```
+  - |
+    ```{=latex}
+    \usepackage{csquotes}
     ```
